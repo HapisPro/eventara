@@ -1,3 +1,4 @@
+import 'package:eventara/screen/add_event_screen.dart';
 import 'package:eventara/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = [
     const TestScreen(),
     const TestScreen(),
-    const TestScreen(),
+    const AddEventScreen(),
     const TestScreen(),
     const TestScreen(),
   ];
