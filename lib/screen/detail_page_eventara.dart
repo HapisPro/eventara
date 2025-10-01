@@ -1,3 +1,4 @@
+import 'package:eventara/core/styles/app_color.dart';
 import 'package:flutter/material.dart';
 
 class DetailPageEventara extends StatelessWidget {
@@ -138,7 +139,7 @@ class DetailPageEventara extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
-                      color: Color(0xff0997c5),
+                      color: AppColor.blue.color,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -157,7 +158,7 @@ class DetailPageEventara extends StatelessWidget {
                             Text(
                               "25",
                               style: TextStyle(
-                                color: Colors.orange,
+                                color: AppColor.orange.color,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -177,7 +178,7 @@ class DetailPageEventara extends StatelessWidget {
                             Text(
                               "16.00 - 18.00",
                               style: TextStyle(
-                                color: Colors.orange,
+                                color: AppColor.orange.color,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -188,13 +189,13 @@ class DetailPageEventara extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.event_note,
-                              color: Colors.orange.shade400,
+                              color: AppColor.orange.color,
                             ),
                             const SizedBox(height: 4),
                             Text(
                               "Add",
                               style: TextStyle(
-                                color: Colors.orange.shade400,
+                                color: AppColor.orange.color,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
