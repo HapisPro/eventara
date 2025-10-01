@@ -7,8 +7,9 @@ class DetailPageEventara extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF0097C5),
+        backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
@@ -28,41 +29,72 @@ class DetailPageEventara extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            color: const Color(0xff0097c5),
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Lorem Ipsum",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+          Stack(
+            children: [
+              Container(
+                height: 250,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/Blueberry.jpg"),
+                    fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(height: 10),
-                Row(
+              ),
+              Container(
+                height: 250,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 16,
+                bottom: 20,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.calendar_today, color: Colors.white, size: 18.0),
-                    SizedBox(height: 6),
                     Text(
-                      "25 July, 2025",
-                      style: TextStyle(color: Colors.white, fontSize: 14),
+                      "Lorem Ipsum",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    SizedBox(height: 20),
-                    Icon(Icons.access_time, color: Colors.white, size: 18.0),
-                    SizedBox(height: 6),
-                    Text(
-                      "4 PM",
-                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          color: Colors.white,
+                          size: 18.0,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          "25 July, 2025",
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ),
+                        SizedBox(width: 20),
+                        Icon(
+                          Icons.access_time,
+                          color: Colors.white,
+                          size: 18.0,
+                        ),
+                        SizedBox(width: 6),
+                        Text(
+                          "4 PM",
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           //Body Content
           Expanded(
