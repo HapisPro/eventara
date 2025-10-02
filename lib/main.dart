@@ -1,3 +1,4 @@
+import 'package:eventara/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +23,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'Eventara',
       theme: AppTheme.lightTheme,
-      home: const MainScreen(),
+      home: const WelcomeScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
