@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'core/index_nav_provider.dart';
 import 'core/styles/app_color.dart';
+import 'feature-home/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,6 +17,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   // Letakkan screen di sini (sesuain indexnya dengan item di bottom nav)
   final List<Widget> _pages = [
+    const HomeScreen(),
     const TestScreen(),
     const TestScreen(),
     const AddEventScreen(),
