@@ -1,12 +1,12 @@
-import 'package:eventara/feature_chatbot/chatbot_screen.dart';
-import 'package:eventara/feature_profile/profile_screen.dart';
-import 'package:eventara/screen/add_event_screen.dart';
+import 'package:eventara/features/chatbot/chatbot_screen.dart';
+import 'package:eventara/features/profile/profile_screen.dart';
+import 'package:eventara/features/add_event/add_event_screen.dart';
 import 'package:eventara/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'core/index_nav_provider.dart';
-import 'feature-home/home_screen.dart';
+import 'features/home/screens/home_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

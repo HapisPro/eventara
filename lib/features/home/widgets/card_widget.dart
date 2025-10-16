@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/styles/app_color.dart';
+import '../../../core/styles/app_color.dart';
 
 class UpcomingEventCard extends StatelessWidget {
   final String title;

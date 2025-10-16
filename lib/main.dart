@@ -1,16 +1,19 @@
-import 'package:eventara/feature_sign_up/sign_up_screen.dart';
-import 'package:eventara/welcome/welcome_screen.dart';
+import 'package:eventara/features/auth/welcome_screen.dart';
+import 'package:eventara/providers/auth_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'feature_sign_in/sign_in_screen.dart';
 import 'core/index_nav_provider.dart';
 import 'core/styles/app_theme.dart';
-import 'main_screen.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => IndexNavProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => IndexNavProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
       child: MainApp(),
     ),
   );

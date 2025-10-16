@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../core/styles/app_color.dart';
+import '../../../core/styles/app_color.dart';
 
 class LiveEventCard extends StatelessWidget {
   final String title;
