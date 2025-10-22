@@ -16,7 +16,7 @@ class AuthService {
       final userDoc = await _firestore.collection('users').doc(uid).get();
 
       if (!userDoc.exists) {
-        throw Exception("Data user tidak ditemukan di Firestore");
+        throw Exception("Data user tidak ditemukan");
       }
 
       return userDoc.data()!;

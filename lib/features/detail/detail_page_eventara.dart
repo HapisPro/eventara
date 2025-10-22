@@ -1,94 +1,161 @@
 import 'package:eventara/core/styles/app_color.dart';
+import 'package:eventara/features/auth/widgets/primary_button.dart';
+import 'package:eventara/features/detail/widgets/contact_section.dart';
+import 'package:eventara/features/detail/widgets/detail_section.dart';
+import 'package:eventara/features/detail/widgets/info_card.dart';
 import 'package:flutter/material.dart';
+import '../../data/models/event_model.dart';
+import 'package:intl/intl.dart';
 
 class DetailPageEventara extends StatelessWidget {
-  const DetailPageEventara({super.key});
+  final EventModel eventData;
+  const DetailPageEventara({super.key, required this.eventData});
+
+  String _formatDate(DateTime date) {
+    return DateFormat('EEEE, d MMMM yyyy', 'id_ID').format(date);
+  }
+
+  String _formatTime(DateTime time) {
+    return DateFormat('HH:mm').format(time);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+        leading: Container(
+          margin: const EdgeInsets.only(left: 8, top: 8),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8),
+            ],
+          ),
+          child: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+          ),
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.notifications_none, color: Colors.white),
+          Container(
+            margin: const EdgeInsets.only(right: 4, top: 8),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.5),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8),
+              ],
+            ),
+            child: IconButton(
+              onPressed: () {
+                // TODO: Bookmark functionality
+              },
+              icon: const Icon(
+                Icons.bookmark_border_rounded,
+                color: Colors.white,
+              ),
+            ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.bookmark, color: Colors.white),
+          Container(
+            margin: const EdgeInsets.only(right: 8, top: 8),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.5),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 8),
+              ],
+            ),
+            child: IconButton(
+              onPressed: () {
+                // TODO: Notification functionality
+              },
+              icon: const Icon(
+                Icons.notifications_rounded,
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Image Section
           Stack(
             children: [
               Container(
-                height: 250,
+                height: 300,
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/Blueberry.jpg"),
-                    fit: BoxFit.cover,
-                  ),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withOpacity(0.1),
                 ),
+                child: eventData.imageUrl != null
+                    ? Image.network(
+                        eventData.imageUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return _buildImagePlaceholder(theme);
+                        },
+                      )
+                    : _buildImagePlaceholder(theme),
               ),
+
               Container(
-                height: 250,
+                height: 300,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.black.withOpacity(0.6), Colors.transparent],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.3),
+                      Colors.black.withOpacity(0.8),
+                    ],
+                    stops: const [0.0, 0.5, 1.0],
                   ),
                 ),
               ),
+
+              // Event Title & Info
               Positioned(
-                left: 16,
+                left: 20,
                 bottom: 20,
+                right: 20,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Title
                     Text(
-                      "Lorem Ipsum",
-                      style: TextStyle(
+                      eventData.title,
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 22,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
+                        height: 1.2,
+                        letterSpacing: 0.3,
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Row(
+                    const SizedBox(height: 12),
+
+                    // Date & Time Chips
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
                       children: [
-                        Icon(
-                          Icons.calendar_today,
-                          color: Colors.white,
-                          size: 18.0,
+                        _buildInfoChip(
+                          icon: Icons.calendar_today_rounded,
+                          label: _formatDate(eventData.date),
+                          color: AppColor.primary.color,
                         ),
-                        SizedBox(width: 6),
-                        Text(
-                          "25 July, 2025",
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                        SizedBox(width: 20),
-                        Icon(
-                          Icons.access_time,
-                          color: Colors.white,
-                          size: 18.0,
-                        ),
-                        SizedBox(width: 6),
-                        Text(
-                          "4 PM",
-                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        _buildInfoChip(
+                          icon: Icons.access_time_rounded,
+                          label: _formatTime(eventData.startTime),
+                          color: AppColor.accent.color,
                         ),
                       ],
                     ),
@@ -97,115 +164,145 @@ class DetailPageEventara extends StatelessWidget {
               ),
             ],
           ),
-          //Body Content
+
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Description",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. "
-                    "Lorem Ipsum has been the industry's standard.",
-                    style: TextStyle(fontSize: 14, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 20),
-                  //Box Peta
-                  Container(
-                    height: 150,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Color(0xff0097c5),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Peta",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  // Description Section
+                  DetailSection(
+                    title: "Deskripsi",
+                    icon: Icons.description_rounded,
+                    child: Text(
+                      eventData.description,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: theme.colorScheme.onBackground,
+                        height: 1.6,
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
-                  //Schedule Box
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: AppColor.blue.color,
-                      borderRadius: BorderRadius.circular(20),
+
+                  const SizedBox(height: 24),
+
+                  // Location Section
+                  DetailSection(
+                    title: "Lokasi",
+                    icon: Icons.location_on_rounded,
+                    child: InfoCard(
+                      icon: Icons.place_rounded,
+                      iconColor: theme.colorScheme.primary,
+                      content:
+                          "${eventData.address}, ${eventData.city}, ${eventData.province}",
+                      theme: theme,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Ticket Info Section
+                  DetailSection(
+                    title: "Informasi Tiket",
+                    icon: Icons.confirmation_number_rounded,
+                    child: InfoCard(
+                      icon: Icons.confirmation_num_rounded,
+                      iconColor: AppColor.accent.color,
+                      content: eventData.ticketInfo,
+                      theme: theme,
+                      isHighlight: true,
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Organizer Contact Section
+                  DetailSection(
+                    title: "Kontak Penyelenggara",
+                    icon: Icons.contact_phone_rounded,
+                    child: Column(
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "July",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                            Text(
-                              "25",
-                              style: TextStyle(
-                                color: AppColor.orange.color,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                        ContactSection(
+                          icon: Icons.person_rounded,
+                          label: eventData.organizer,
+                          theme: theme,
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Monday",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                            Text(
-                              "16.00 - 18.00",
-                              style: TextStyle(
-                                color: AppColor.orange.color,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Icon(
-                              Icons.event_note,
-                              color: AppColor.orange.color,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "Add",
-                              style: TextStyle(
-                                color: AppColor.orange.color,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(height: 12),
+                        ContactSection(
+                          icon: Icons.phone_rounded,
+                          label: eventData.contact,
+                          theme: theme,
+                          isPhone: true,
                         ),
                       ],
                     ),
                   ),
+
+                  const SizedBox(height: 32),
+
+                  SizedBox(
+                    width: double.infinity,
+                    child: PrimaryButton(text: 'Tambahkan ke kalender',onPressed: () => {}, )
+                  ),
+
+                  const SizedBox(height: 20),
                 ],
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImagePlaceholder(ThemeData theme) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            theme.colorScheme.primary,
+            theme.colorScheme.primary.withOpacity(0.6),
+          ],
+        ),
+      ),
+      child: const Center(
+        child: Icon(Icons.event_rounded, size: 100, color: Colors.white54),
+      ),
+    );
+  }
+
+  Widget _buildInfoChip({
+    required IconData icon,
+    required String label,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: Colors.white, size: 16),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],

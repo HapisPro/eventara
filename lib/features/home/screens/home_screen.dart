@@ -1,6 +1,10 @@
+import 'package:eventara/data/state/user_state.dart';
+import 'package:eventara/features/detail/detail_page_eventara.dart';
+import 'package:eventara/providers/home_provider.dart';
+import 'package:eventara/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-
-import '../../../core/styles/app_color.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import '../widgets/card_widget.dart';
 import '../widgets/live_event_widget.dart';
 
@@ -14,24 +18,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
 
-  // Hardcoded data for demonstration
-  final List<Map<String, String>> upcomingEvents = [
-    {
-      'title': 'Lorem Ipsum',
-      'location': 'Riau',
-      'dateTime': 'March 24. 14.00 Am',
-    },
-    {
-      'title': 'Lorem Ipsum',
-      'location': 'Riau',
-      'dateTime': 'March 24. 14.00 Am',
-    },
-    {
-      'title': 'Lorem Ipsum',
-      'location': 'Riau',
-      'dateTime': 'March 24. 14.00 Am',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting('id', null);
+    Future.microtask(() {
+      final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      homeProvider.loadHomeData();
+      userProvider.fetchUser();
+    });
+  }
 
   @override
   void dispose() {
@@ -41,198 +38,253 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 20),
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Consumer2<UserProvider, HomeProvider>(
+            builder: (context, userProvider, homeProvider, _) {
+              final userState = userProvider.state;
 
-              // Location header
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColor.blue.color,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.location_on,
-                        color: AppColor.orange.color,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 6),
-                      const Text(
-                        'Toronto,Canada',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 24),
-
-              // Date and welcome message
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Today's March 24th",
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+              if (userState is UserLoading || homeProvider.isLoading) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: theme.colorScheme.primary,
+                      strokeWidth: 3,
                     ),
-                    Text(
-                      'Welcome, Jimmy',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+                  ),
+                );
+              }
+
+              if (userState is! UserLoaded) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  child: Center(
+                    child: Text(
+                      "User belum tersedia",
+                      style: TextStyle(color: theme.colorScheme.onBackground),
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                );
+              }
 
-              const SizedBox(height: 24),
+              final user = userState.user;
 
-              // Search bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(25),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, 2),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Selamat Datang ${user.username}',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: theme.colorScheme.onBackground.withOpacity(
+                              0.7,
                             ),
-                          ],
-                        ),
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            hintText: 'Search',
-                            hintStyle: TextStyle(color: Colors.grey.shade400),
-                            prefixIcon: Icon(
-                              Icons.search,
-                              color: AppColor.orange.color,
-                            ),
-                            border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 15,
-                            ),
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 4),
+                      ],
                     ),
-                    const SizedBox(width: 12),
-                    Container(
-                      width: 50,
-                      height: 50,
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Search bar
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
+                            color: isDark
+                                ? Colors.black.withOpacity(0.3)
+                                : theme.colorScheme.primary.withOpacity(0.1),
+                            blurRadius: 12,
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
-                      child: Icon(Icons.tune, color: AppColor.orange.color),
+                      child: TextField(
+                        controller: _searchController,
+                        style: TextStyle(color: theme.colorScheme.onSurface),
+                        decoration: InputDecoration(
+                          hintText: 'Cari event menarik...',
+                          hintStyle: TextStyle(
+                            color: theme.colorScheme.onSurface.withOpacity(0.5),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            color: theme.colorScheme.primary,
+                            size: 24,
+                          ),
+                          filled: true,
+                          fillColor: theme.colorScheme.surface,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary.withOpacity(0.1),
+                              width: 1,
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
+                            ),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
+                          ),
+                        ),
+                      ),
                     ),
+                  ),
+
+                  const SizedBox(height: 28),
+                  //live Event section
+                  if (homeProvider.liveEvents.isNotEmpty) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          'Live Event',
+                          style: theme.textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.onBackground,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: homeProvider.liveEvents.length,
+                      itemBuilder: (context, index) {
+                        final event = homeProvider.liveEvents[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: LiveEventWidget(
+                            title: event.title,
+                            organizer: event.organizer,
+                            address: event.address,
+                            location: "${event.city}, ${event.province}",
+                            imageUrl: event.imageUrl,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      DetailPageEventara(eventData: event),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 32),
                   ],
-                ),
-              ),
 
-              const SizedBox(height: 32),
+                  // Upcoming Events Section
+                  if (homeProvider.upcomingEvents.isNotEmpty) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        'Event akan datang',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: theme.colorScheme.onBackground,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: homeProvider.upcomingEvents.length,
+                      itemBuilder: (context, index) {
+                        final event = homeProvider.upcomingEvents[index];
+                        return CardWidget(
+                          title: event.title,
+                          location: "${event.city}, ${event.province}",
+                          dateTime:
+                              "${event.startTime.hour}:${event.startTime.minute.toString().padLeft(2, '0')}",
+                          imageUrl: event.imageUrl,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    DetailPageEventara(eventData: event),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 32),
+                  ],
 
-              // Live Event section
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Live Event',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Live Event card
-              LiveEventCard(
-                title: 'Lorem Ipsum',
-                organizer: 'Suku Abc',
-                distance: '18,5 Km',
-                location: 'Pekanbaru,Riau',
-                onTap: () {
-                  // Navigate to event details
-                  print('Live event tapped');
-                },
-              ),
-
-              const SizedBox(height: 32),
-
-              // Upcoming Event section
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  'Upcoming Event',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Upcoming events list
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: upcomingEvents.length,
-                itemBuilder: (context, index) {
-                  final event = upcomingEvents[index];
-                  return UpcomingEventCard(
-                    title: event['title']!,
-                    location: event['location']!,
-                    dateTime: event['dateTime']!,
-                    onTap: () {
-                      // Navigate to event details
-                      print('Upcoming event ${index + 1} tapped');
-                    },
-                  );
-                },
-              ),
-
-              const SizedBox(height: 20),
-            ],
+                  // Empty event
+                  if (homeProvider.liveEvents.isEmpty &&
+                      homeProvider.upcomingEvents.isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.event_busy_rounded,
+                            size: 80,
+                            color: theme.colorScheme.onBackground.withOpacity(
+                              0.3,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Belum ada event tersedia',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.onBackground,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Event baru akan segera hadir!',
+                            style: TextStyle(
+                              color: theme.colorScheme.onBackground.withOpacity(
+                                0.6,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
         ),
       ),

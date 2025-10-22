@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../core/styles/app_color.dart';
 
-class UpcomingEventCard extends StatelessWidget {
+class CardWidget extends StatelessWidget {
   final String title;
   final String location;
   final String dateTime;
   final String? imageUrl;
   final VoidCallback? onTap;
 
-  const UpcomingEventCard({
+  const CardWidget({
     super.key,
     required this.title,
     required this.location,
@@ -20,102 +20,119 @@ class UpcomingEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: theme.colorScheme.primary.withOpacity(0.1),
+            width: 1,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: isDark 
+                  ? Colors.black.withOpacity(0.2)
+                  : Colors.black.withOpacity(0.06),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
         child: Row(
           children: [
-            // Image or icon
             Container(
-              width: 60,
-              height: 60,
+              width: 70,
+              height: 70,
               decoration: BoxDecoration(
-                color: AppColor.blue.color,
-                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primary,
+                    theme.colorScheme.primary.withOpacity(0.8),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: theme.colorScheme.primary.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              child: imageUrl != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(14),
+                child: imageUrl != null
+                    ? Image.network(
                         imageUrl!,
                         fit: BoxFit.cover,
-                        width: 60,
-                        height: 60,
                         errorBuilder: (context, error, stackTrace) {
-                          return const Icon(
-                            Icons.calendar_today,
-                            color: Colors.white,
-                            size: 30,
-                          );
+                          return _buildIconPlaceholder(theme);
                         },
-                      ),
-                    )
-                  : const Icon(
-                      Icons.calendar_today,
-                      color: Colors.white,
-                      size: 30,
-                    ),
+                      )
+                    : _buildIconPlaceholder(theme),
+              ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 14),
 
-            // Event details
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.black87,
+                      color: theme.colorScheme.onSurface,
+                      height: 1.2,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
-                      const Icon(
-                        Icons.location_on,
+                      Icon(
+                        Icons.location_on_rounded,
                         size: 16,
-                        color: Colors.grey,
+                        color: theme.colorScheme.primary,
                       ),
                       const SizedBox(width: 4),
-                      Text(
-                        location,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: TextStyle(
+                            color: theme.colorScheme.onSurface.withOpacity(0.6),
+                            fontSize: 13,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(
-                        Icons.access_time,
+                      Icon(
+                        Icons.access_time_rounded,
                         size: 16,
-                        color: Colors.grey,
+                        color: AppColor.accent.color,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         dateTime,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -123,8 +140,24 @@ class UpcomingEventCard extends StatelessWidget {
                 ],
               ),
             ),
+
+            Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 18,
+              color: theme.colorScheme.primary.withOpacity(0.5),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildIconPlaceholder(ThemeData theme) {
+    return Center(
+      child: Icon(
+        Icons.calendar_month_rounded,
+        color: Colors.white.withOpacity(0.9),
+        size: 32,
       ),
     );
   }

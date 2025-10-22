@@ -1,3 +1,4 @@
+import 'package:eventara/core/styles/app_color.dart';
 import 'package:eventara/features/chatbot/chatbot_screen.dart';
 import 'package:eventara/features/profile/profile_screen.dart';
 import 'package:eventara/features/add_event/add_event_screen.dart';
@@ -27,7 +28,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = const Color(0xFF0096C7);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
 
     return Consumer<IndexNavProvider>(
       builder: (context, navProvider, child) {
@@ -37,12 +39,14 @@ class _MainScreenState extends State<MainScreen> {
             index: navProvider.idxBottomNavbar,
             children: _pages,
           ),
-
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.colorScheme.surface,
               boxShadow: [
                 BoxShadow(
+                  color: isDark
+                      ? Colors.black.withOpacity(0.3)
+                      : Colors.black.withOpacity(0.1),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),
@@ -58,7 +62,7 @@ class _MainScreenState extends State<MainScreen> {
                 topRight: Radius.circular(24),
               ),
               child: Theme(
-                data: Theme.of(context).copyWith(
+                data: theme.copyWith(
                   splashFactory: NoSplash.splashFactory,
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
@@ -67,49 +71,70 @@ class _MainScreenState extends State<MainScreen> {
                   currentIndex: navProvider.idxBottomNavbar,
                   onTap: (index) => navProvider.setIdxBottomNavbar = index,
                   type: BottomNavigationBarType.fixed,
-                  backgroundColor: Colors.white,
+                  backgroundColor: theme.colorScheme.surface,
                   elevation: 0,
                   showUnselectedLabels: false,
                   showSelectedLabels: true,
-                  selectedItemColor: primaryColor,
-                  unselectedItemColor: Colors.black54,
+                  selectedItemColor: theme.colorScheme.primary,
+                  unselectedItemColor: theme.colorScheme.onSurface.withOpacity(
+                    0.6,
+                  ),
                   selectedLabelStyle: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),
                   unselectedLabelStyle: const TextStyle(fontSize: 11),
-
                   items: [
                     _buildNavItem(
                       icon: Icons.home_rounded,
                       label: "Home",
                       isActive: navProvider.idxBottomNavbar == 0,
-                      activeColor: primaryColor,
+                      activeColor: theme.colorScheme.primary,
+                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
+                        0.6,
+                      ),
+                      isDark: isDark,
                     ),
                     _buildNavItem(
                       icon: Icons.bookmark_rounded,
                       label: "Bookmark",
                       isActive: navProvider.idxBottomNavbar == 1,
-                      activeColor: primaryColor,
+                      activeColor: theme.colorScheme.primary,
+                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
+                        0.6,
+                      ),
+                      isDark: isDark,
                     ),
                     _buildNavItem(
                       icon: Icons.add_circle_rounded,
                       label: "Add Event",
                       isActive: navProvider.idxBottomNavbar == 2,
-                      activeColor: primaryColor,
+                      activeColor: theme.colorScheme.primary,
+                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
+                        0.6,
+                      ),
                       isCenter: true,
+                      isDark: isDark,
                     ),
                     _buildNavItem(
                       icon: Icons.auto_awesome_rounded,
                       label: "Asisten AI",
                       isActive: navProvider.idxBottomNavbar == 3,
-                      activeColor: primaryColor,
+                      activeColor: theme.colorScheme.primary,
+                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
+                        0.6,
+                      ),
+                      isDark: isDark,
                     ),
                     _buildNavItem(
                       icon: Icons.person_rounded,
                       label: "Profile",
                       isActive: navProvider.idxBottomNavbar == 4,
-                      activeColor: primaryColor,
+                      activeColor: theme.colorScheme.primary,
+                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
+                        0.6,
+                      ),
+                      isDark: isDark,
                     ),
                   ],
                 ),
@@ -127,6 +152,8 @@ class _MainScreenState extends State<MainScreen> {
     required String label,
     required bool isActive,
     required Color activeColor,
+    required Color inactiveColor,
+    required bool isDark,
     bool isCenter = false,
   }) {
     return BottomNavigationBarItem(
@@ -138,10 +165,12 @@ class _MainScreenState extends State<MainScreen> {
             ? BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: LinearGradient(
-                  colors: [
-                    activeColor.withOpacity(0.9),
-                    const Color(0xFF00B4D8),
-                  ],
+                  colors: isDark
+                      ? [
+                          AppColor.primaryLight.color.withOpacity(0.9),
+                          AppColor.primaryLight.color,
+                        ]
+                      : [activeColor.withOpacity(0.9), const Color(0xFF00B4D8)],
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -156,8 +185,8 @@ class _MainScreenState extends State<MainScreen> {
           icon,
           size: isCenter ? 40 : 28,
           color: isCenter
-              ? Colors.white
-              : (isActive ? activeColor : Colors.black54),
+              ? (isDark ? Colors.black : Colors.white)
+              : (isActive ? activeColor : inactiveColor),
         ),
       ),
       label: label,
