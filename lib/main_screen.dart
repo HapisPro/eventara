@@ -1,5 +1,6 @@
 import 'package:eventara/core/styles/app_color.dart';
 import 'package:eventara/features/chatbot/chatbot_screen.dart';
+import 'package:eventara/features/home/screens/bookmark_screen.dart';
 import 'package:eventara/features/profile/profile_screen.dart';
 import 'package:eventara/features/add_event/add_event_screen.dart';
 import 'package:eventara/test_screen.dart';
@@ -20,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
   // Halaman sesuai index bottom navbar
   final List<Widget> _pages = [
     const HomeScreen(),
-    const TestScreen(),
+    const BookmarkScreen(),
     const AddEventScreen(),
     const ChatBotScreen(),
     const ProfileScreen(),

@@ -8,22 +8,15 @@ class EventService {
   final _firestore = FirebaseFirestore.instance;
   final _storage = SupabaseStorageService();
 
-  //add image to supabase storage
   Future<void> addImageToSupabase(EventModel event, {File? imageFile}) async {
     String? imageUrl = event.imageUrl;
 
     if (imageFile != null) {
-      try {
-        imageUrl = await _storage.uploadImage(imageFile);
-      } catch (e) {
-        rethrow;
-      }
+      imageUrl = await _storage.uploadImage(imageFile);
     }
 
     final docData = event.toMap();
-    if (imageUrl != null) {
-      docData['imageUrl'] = imageUrl;
-    }
+    if (imageUrl != null) docData['imageUrl'] = imageUrl;
 
     await _firestore.collection('events').add(docData);
   }
@@ -37,19 +30,5 @@ class EventService {
     return snapshot.docs
         .map((doc) => EventModel.fromMap(doc.data(), doc.id))
         .toList();
-  }
-
-  List<EventModel> filterUpcoming(List<EventModel> events) {
-    final now = DateTime.now();
-    return events.where((e) => e.date.isAfter(now)).toList();
-  }
-
-  List<EventModel> filterLive(List<EventModel> events) {
-    final now = DateTime.now();
-    return events.where((e) {
-      final start = e.startTime;
-      final end = e.startTime.add(const Duration(hours: 6));
-      return now.isAfter(start) && now.isBefore(end);
-    }).toList();
   }
 }

@@ -118,42 +118,91 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      child: TextField(
-                        controller: _searchController,
-                        style: TextStyle(color: theme.colorScheme.onSurface),
-                        decoration: InputDecoration(
-                          hintText: 'Cari event menarik...',
-                          hintStyle: TextStyle(
-                            color: theme.colorScheme.onSurface.withOpacity(0.5),
-                          ),
-                          prefixIcon: Icon(
-                            Icons.search_rounded,
-                            color: theme.colorScheme.primary,
-                            size: 24,
-                          ),
-                          filled: true,
-                          fillColor: theme.colorScheme.surface,
-                          border: OutlineInputBorder(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Container(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide.none,
+                            boxShadow: [
+                              BoxShadow(
+                                color: isDark
+                                    ? Colors.black.withOpacity(0.3)
+                                    : theme.colorScheme.primary.withOpacity(
+                                        0.1,
+                                      ),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: theme.colorScheme.primary.withOpacity(0.1),
-                              width: 1,
+                          child: TextField(
+                            controller: _searchController,
+                            onChanged: (value) {
+                              // Panggil provider agar hasil pencarian langsung di-update
+                              final homeProvider = Provider.of<HomeProvider>(
+                                context,
+                                listen: false,
+                              );
+                              homeProvider.searchEvents(value);
+                            },
+                            style: TextStyle(
+                              color: theme.colorScheme.onSurface,
                             ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                              color: theme.colorScheme.primary,
-                              width: 2,
+                            decoration: InputDecoration(
+                              hintText: 'Cari event menarik...',
+                              hintStyle: TextStyle(
+                                color: theme.colorScheme.onSurface.withOpacity(
+                                  0.5,
+                                ),
+                              ),
+                              prefixIcon: Icon(
+                                Icons.search_rounded,
+                                color: theme.colorScheme.primary,
+                                size: 24,
+                              ),
+                              suffixIcon: _searchController.text.isNotEmpty
+                                  ? IconButton(
+                                      icon: const Icon(Icons.close_rounded),
+                                      color: theme.colorScheme.onSurface
+                                          .withOpacity(0.6),
+                                      onPressed: () {
+                                        _searchController.clear();
+                                        final homeProvider =
+                                            Provider.of<HomeProvider>(
+                                              context,
+                                              listen: false,
+                                            );
+                                        homeProvider.searchEvents('');
+                                      },
+                                    )
+                                  : null,
+                              filled: true,
+                              fillColor: theme.colorScheme.surface,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide(
+                                  color: theme.colorScheme.primary.withOpacity(
+                                    0.1,
+                                  ),
+                                  width: 1,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                borderSide: BorderSide(
+                                  color: theme.colorScheme.primary,
+                                  width: 2,
+                                ),
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 16,
+                              ),
                             ),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 16,
                           ),
                         ),
                       ),
@@ -228,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         final event = homeProvider.upcomingEvents[index];
                         return CardWidget(
                           title: event.title,
-                          location: "${event.city}, ${event.province}",
+                          location: event.province,
                           dateTime:
                               "${event.startTime.hour}:${event.startTime.minute.toString().padLeft(2, '0')}",
                           imageUrl: event.imageUrl,
@@ -253,6 +302,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.all(40),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.event_busy_rounded,
@@ -264,19 +315,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 16),
                           Text(
                             'Belum ada event tersedia',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
                               color: theme.colorScheme.onBackground,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Event baru akan segera hadir!',
-                            style: TextStyle(
-                              color: theme.colorScheme.onBackground.withOpacity(
-                                0.6,
-                              ),
                             ),
                           ),
                         ],

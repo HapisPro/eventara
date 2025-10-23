@@ -1,13 +1,13 @@
 class EventModel {
-  final String title;
   final String? id;
+  final String title;
   final String description;
   final String address;
   final String city;
   final String province;
   final String ticketInfo;
   final DateTime date;
-  final DateTime startTime; 
+  final DateTime startTime;
   final String organizer;
   final String contact;
   final String? imageUrl;
@@ -29,6 +29,7 @@ class EventModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'description': description,
       'address': address,

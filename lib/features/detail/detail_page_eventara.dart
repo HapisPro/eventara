@@ -3,7 +3,10 @@ import 'package:eventara/features/auth/widgets/primary_button.dart';
 import 'package:eventara/features/detail/widgets/contact_section.dart';
 import 'package:eventara/features/detail/widgets/detail_section.dart';
 import 'package:eventara/features/detail/widgets/info_card.dart';
+import 'package:eventara/providers/bookmark_provider.dart';
+import 'package:eventara/providers/notification_state_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../data/models/event_model.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +25,8 @@ class DetailPageEventara extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
+    final bookmarkProvider = context.read<BookmarkProvider>();
+    final notifProvider = context.watch<NotificationStateProvider>();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -38,10 +42,11 @@ class DetailPageEventara extends StatelessWidget {
             ],
           ),
           child: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
           ),
         ),
+
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 4, top: 8),
@@ -54,11 +59,15 @@ class DetailPageEventara extends StatelessWidget {
             ),
             child: IconButton(
               onPressed: () {
-                // TODO: Bookmark functionality
+                bookmarkProvider.toggleBookmark(eventData);
               },
-              icon: const Icon(
-                Icons.bookmark_border_rounded,
-                color: Colors.white,
+              icon: Icon(
+                context.watch<BookmarkProvider>().isBookmarked(
+                      eventData.id ?? '',
+                    )
+                    ? Icons.bookmark
+                    : Icons.bookmark_border,
+                color: Colors.amber,
               ),
             ),
           ),
@@ -72,12 +81,34 @@ class DetailPageEventara extends StatelessWidget {
               ],
             ),
             child: IconButton(
-              onPressed: () {
-                // TODO: Notification functionality
+              onPressed: () async {
+                await notifProvider.toggleNotificationForEvent(
+                  eventId: eventData.id ?? '',
+                  id: eventData.id.hashCode,
+                  title: "Pengingat: ${eventData.title}",
+                  body: "Jangan lewatkan event seru!",
+                  eventDateTime: eventData.startTime,
+                );
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      notifProvider.isNotificationActive(eventData.id ?? '')
+                          ? "Notifikasi berhasil dijadwalkan!"
+                          : "Notifikasi dibatalkan",
+                    ),
+                    backgroundColor:
+                        notifProvider.isNotificationActive(eventData.id ?? '')
+                        ? AppColor.success.color
+                        : AppColor.error.color,
+                  ),
+                );
               },
-              icon: const Icon(
-                Icons.notifications_rounded,
-                color: Colors.white,
+              icon: Icon(
+                notifProvider.isNotificationActive(eventData.id ?? '')
+                    ? Icons.notifications_active
+                    : Icons.notifications_none,
+                color: Colors.amber,
               ),
             ),
           ),
@@ -243,7 +274,10 @@ class DetailPageEventara extends StatelessWidget {
 
                   SizedBox(
                     width: double.infinity,
-                    child: PrimaryButton(text: 'Tambahkan ke kalender',onPressed: () => {}, )
+                    child: PrimaryButton(
+                      text: 'Tambahkan ke kalender',
+                      onPressed: () => {},
+                    ),
                   ),
 
                   const SizedBox(height: 20),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventara/core/styles/app_color.dart';
 import 'package:eventara/data/models/event_model.dart';
 import 'package:eventara/features/add_event/widgets/date_picker_field.dart';
@@ -22,6 +23,7 @@ class AddEventScreen extends StatefulWidget {
 
 class _AddEventScreenState extends State<AddEventScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _firestore = FirebaseFirestore.instance;
 
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
@@ -297,8 +299,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
       selectedTime!.hour,
       selectedTime!.minute,
     );
-
+    final docRef = _firestore.collection('events').doc();
     final event = EventModel(
+      id: docRef.id,
       title: _titleController.text,
       description: _descController.text,
       address: _addressController.text,
