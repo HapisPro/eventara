@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:eventara/core/apptheme_provider.dart';
+import 'package:eventara/core/shared_preference_provider.dart';
 import 'package:eventara/data/state/user_state.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
 import 'package:eventara/providers/auth_provider.dart';
@@ -209,18 +210,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             );
 
                             if (shouldLogout == true) {
+                              final sharedPrefProvider =
+                                  Provider.of<SharedPreferenceProvider>(
+                                    context,
+                                    listen: false,
+                                  );
+
                               await Provider.of<AuthProvider>(
                                 context,
                                 listen: false,
                               ).signOut();
 
+                              // Clear persisted login state
+                              await sharedPrefProvider.logout();
+
                               // Arahkan ke halaman login setelah logout
                               if (context.mounted) {
-                                Navigator.push(
+                                Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => WelcomeScreen(),
+                                    builder: (_) => const WelcomeScreen(),
                                   ),
+                                  (route) => false,
                                 );
                               }
                             }

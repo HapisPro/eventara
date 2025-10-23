@@ -1,3 +1,4 @@
+import 'package:eventara/core/shared_preference_provider.dart';
 import 'package:eventara/core/styles/app_color.dart';
 import 'package:eventara/data/state/auth_state.dart';
 import 'package:eventara/features/auth/sign_up_screen.dart';
@@ -57,6 +58,19 @@ class _SignInScreenState extends State<SignInScreen> {
                 );
               provider.resetState();
             } else if (state is AuthSuccess) {
+              // Save login state to SharedPreferences
+              final sharedPrefProvider = Provider.of<SharedPreferenceProvider>(
+                context,
+                listen: false,
+              );
+
+              final userData = provider.userData;
+              sharedPrefProvider.login(
+                userId: userData?['uid'] ?? '',
+                email: userData?['email'] ?? '',
+                userName: userData?['username'] ?? state.username,
+              );
+
               ScaffoldMessenger.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
