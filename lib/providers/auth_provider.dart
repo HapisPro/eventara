@@ -10,12 +10,17 @@ class AuthProvider extends ChangeNotifier {
 
   bool get isLoading => _state is AuthLoading;
 
+  // Store user data for persist login
+  Map<String, dynamic>? _userData;
+  Map<String, dynamic>? get userData => _userData;
+
   Future<void> signIn(String email, String password) async {
     _state = AuthLoading();
     notifyListeners();
 
     try {
       final userData = await _authService.signIn(email, password);
+      _userData = userData; // Store user data
       _state = AuthSuccess(userData['username'] ?? 'User');
     } catch (e) {
       _state = AuthError(e.toString().replaceFirst('Exception: ', ''));
@@ -54,6 +59,7 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       await _authService.signOut();
+      _userData = null; // Clear user data
       _state = AuthInitial(); // reset ke state awal
     } catch (e) {
       _state = AuthError("Gagal logout: $e");
