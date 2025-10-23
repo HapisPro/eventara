@@ -5,8 +5,8 @@ import 'package:eventara/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../widgets/card_widget.dart';
-import '../widgets/live_event_widget.dart';
+import '../home/widgets/card_widget.dart';
+import '../home/widgets/live_event_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -101,8 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   const SizedBox(height: 24),
-
-                  // Search bar
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Container(
@@ -118,91 +116,66 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: isDark
-                                    ? Colors.black.withOpacity(0.3)
-                                    : theme.colorScheme.primary.withOpacity(
-                                        0.1,
-                                      ),
-                                blurRadius: 12,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          // Panggil provider agar hasil pencarian langsung di-update
+                          final homeProvider = Provider.of<HomeProvider>(
+                            context,
+                            listen: false,
+                          );
+                          homeProvider.searchEvents(value);
+                        },
+                        style: TextStyle(color: theme.colorScheme.onSurface),
+                        decoration: InputDecoration(
+                          hintText: 'Cari event menarik...',
+                          hintStyle: TextStyle(
+                            color: theme.colorScheme.onSurface.withOpacity(0.5),
                           ),
-                          child: TextField(
-                            controller: _searchController,
-                            onChanged: (value) {
-                              // Panggil provider agar hasil pencarian langsung di-update
-                              final homeProvider = Provider.of<HomeProvider>(
-                                context,
-                                listen: false,
-                              );
-                              homeProvider.searchEvents(value);
-                            },
-                            style: TextStyle(
-                              color: theme.colorScheme.onSurface,
+                          prefixIcon: Icon(
+                            Icons.search_rounded,
+                            color: theme.colorScheme.primary,
+                            size: 24,
+                          ),
+                          suffixIcon: _searchController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.close_rounded),
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.6),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    final homeProvider =
+                                        Provider.of<HomeProvider>(
+                                          context,
+                                          listen: false,
+                                        );
+                                    homeProvider.searchEvents('');
+                                  },
+                                )
+                              : null,
+                          filled: true,
+                          fillColor: theme.colorScheme.surface,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary.withOpacity(0.1),
+                              width: 1,
                             ),
-                            decoration: InputDecoration(
-                              hintText: 'Cari event menarik...',
-                              hintStyle: TextStyle(
-                                color: theme.colorScheme.onSurface.withOpacity(
-                                  0.5,
-                                ),
-                              ),
-                              prefixIcon: Icon(
-                                Icons.search_rounded,
-                                color: theme.colorScheme.primary,
-                                size: 24,
-                              ),
-                              suffixIcon: _searchController.text.isNotEmpty
-                                  ? IconButton(
-                                      icon: const Icon(Icons.close_rounded),
-                                      color: theme.colorScheme.onSurface
-                                          .withOpacity(0.6),
-                                      onPressed: () {
-                                        _searchController.clear();
-                                        final homeProvider =
-                                            Provider.of<HomeProvider>(
-                                              context,
-                                              listen: false,
-                                            );
-                                        homeProvider.searchEvents('');
-                                      },
-                                    )
-                                  : null,
-                              filled: true,
-                              fillColor: theme.colorScheme.surface,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: BorderSide.none,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: BorderSide(
-                                  color: theme.colorScheme.primary.withOpacity(
-                                    0.1,
-                                  ),
-                                  width: 1,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                borderSide: BorderSide(
-                                  color: theme.colorScheme.primary,
-                                  width: 2,
-                                ),
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 16,
-                              ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(
+                              color: theme.colorScheme.primary,
+                              width: 2,
                             ),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 16,
                           ),
                         ),
                       ),
@@ -299,30 +272,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Empty event
                   if (homeProvider.liveEvents.isEmpty &&
                       homeProvider.upcomingEvents.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.all(40),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.event_busy_rounded,
-                            size: 80,
-                            color: theme.colorScheme.onBackground.withOpacity(
-                              0.3,
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 40,
+                        ), 
+                        child: Column(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center, 
+                          crossAxisAlignment:
+                              CrossAxisAlignment.center, 
+                          children: [
+                            Icon(
+                              Icons.event_busy_rounded,
+                              size: 80,
+                              color: theme.colorScheme.onBackground.withOpacity(
+                                0.3,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Belum ada event tersedia',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onBackground,
+                            const SizedBox(height: 16),
+                            Text(
+                              'Belum ada event tersedia',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.onBackground,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                 ],

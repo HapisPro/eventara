@@ -1,10 +1,11 @@
+import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/core/styles/app_color.dart';
 import 'package:eventara/features/auth/widgets/primary_button.dart';
 import 'package:eventara/features/detail/widgets/contact_section.dart';
 import 'package:eventara/features/detail/widgets/detail_section.dart';
 import 'package:eventara/features/detail/widgets/info_card.dart';
 import 'package:eventara/providers/bookmark_provider.dart';
-import 'package:eventara/providers/notification_state_provider.dart';
+import 'package:eventara/providers/notification_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../data/models/event_model.dart';
@@ -26,7 +27,7 @@ class DetailPageEventara extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final bookmarkProvider = context.read<BookmarkProvider>();
-    final notifProvider = context.watch<NotificationStateProvider>();
+    final notifProvider = context.watch<NotificationProvider>();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -88,20 +89,6 @@ class DetailPageEventara extends StatelessWidget {
                   title: "Pengingat: ${eventData.title}",
                   body: "Jangan lewatkan event seru!",
                   eventDateTime: eventData.startTime,
-                );
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      notifProvider.isNotificationActive(eventData.id ?? '')
-                          ? "Notifikasi berhasil dijadwalkan!"
-                          : "Notifikasi dibatalkan",
-                    ),
-                    backgroundColor:
-                        notifProvider.isNotificationActive(eventData.id ?? '')
-                        ? AppColor.success.color
-                        : AppColor.error.color,
-                  ),
                 );
               },
               icon: Icon(

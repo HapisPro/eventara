@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eventara/core/styles/app_color.dart';
+import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/data/models/event_model.dart';
 import 'package:eventara/features/add_event/widgets/date_picker_field.dart';
 import 'package:eventara/features/add_event/widgets/image_upload_box.dart';
@@ -80,12 +80,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
           if (state is EventSuccess) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColor.success.color,
-                ),
-              );
+              AppSnackBarWidget.showSuccess(context, state.message);
               _resetForm();
               provider.reset();
             });
@@ -93,12 +88,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
           if (state is EventError) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColor.error.color,
-                ),
-              );
+              AppSnackBarWidget.showError(context, state.message);
+
               provider.reset();
             });
           }
@@ -273,22 +264,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     if (selectedDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("Silakan pilih tanggal event"),
-          backgroundColor: AppColor.error.color,
-        ),
-      );
+      AppSnackBarWidget.showWarning(context, "Silahkan pilih tanggal event");
       return;
     }
 
     if (selectedTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text("Silakan pilih jam dimulai"),
-          backgroundColor: AppColor.error.color,
-        ),
-      );
+      AppSnackBarWidget.showWarning(context, "Silahkan pilih jam mulai");
       return;
     }
 

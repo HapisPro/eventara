@@ -3,10 +3,9 @@ import 'package:flutter/foundation.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-class NotificationStateProvider extends ChangeNotifier {
+class NotificationProvider extends ChangeNotifier {
   final LocalNotificationService flutterNotificationService;
-  NotificationStateProvider(this.flutterNotificationService);
+  NotificationProvider(this.flutterNotificationService);
 
   final Map<String, bool> _notificationStates = {};
   bool _initialized = false;
@@ -41,12 +40,10 @@ class NotificationStateProvider extends ChangeNotifier {
     final isActive = _notificationStates[eventId] ?? false;
 
     if (isActive) {
-      // Batalkan notifikasi
       await flutterNotificationService.cancelNotification(id);
       _notificationStates[eventId] = false;
       await prefs.setBool('notif_$eventId', false);
     } else {
-      // Jadwalkan notifikasi
       await flutterNotificationService.scheduleNotificationOneDayBeforeEvent(
         id: id,
         title: title,

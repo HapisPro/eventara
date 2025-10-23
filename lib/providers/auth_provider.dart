@@ -53,21 +53,6 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signOut() async {
-    _state = AuthLoading();
-    notifyListeners();
-
-    try {
-      await _authService.signOut();
-      _userData = null; // Clear user data
-      _state = AuthInitial(); // reset ke state awal
-    } catch (e) {
-      _state = AuthError("Gagal logout: $e");
-    }
-
-    notifyListeners();
-  }
-
   void resetState() {
     _state = AuthInitial();
     notifyListeners();

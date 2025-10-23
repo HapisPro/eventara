@@ -8,7 +8,7 @@ import 'package:eventara/providers/auth_provider.dart';
 import 'package:eventara/providers/bookmark_provider.dart';
 import 'package:eventara/providers/event_provider.dart';
 import 'package:eventara/providers/home_provider.dart';
-import 'package:eventara/providers/notification_state_provider.dart';
+import 'package:eventara/providers/notification_provider.dart';
 import 'package:eventara/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +63,7 @@ void main() async {
             ..configureLocalTimeZone(),
         ),
         ChangeNotifierProvider(
-          create: (context) => NotificationStateProvider(
+          create: (context) => NotificationProvider(
             context.read<LocalNotificationService>(),
           ),
         ),

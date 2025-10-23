@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/core/apptheme_provider.dart';
 import 'package:eventara/core/shared_preference_provider.dart';
 import 'package:eventara/data/state/user_state.dart';
@@ -32,9 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (xfile != null) {
       final file = File(xfile.path);
       await provider.updateProfilePicture(file);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Foto profil berhasil diperbarui")),
-      );
+      AppSnackBarWidget.showSuccess(context, "Foto profil berhasil diperbarui");
     }
   }
 
@@ -170,7 +169,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             activeColor: AppColor.primaryLight.color,
                           ),
                           onTap: () {
-                            // Toggle theme when card is tapped
                             final isDark =
                                 themeProvider.themeMode == ThemeMode.dark;
                             themeProvider.toggleTheme(!isDark);
@@ -197,12 +195,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   ElevatedButton(
                                     onPressed: () async {
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context,
-                                        '/welcome',
-                                        (route) => false,
-                                      );
+                                      Navigator.pop(context, true);
+
+                                      final sharedPrefProvider =
+                                          Provider.of<SharedPreferenceProvider>(
+                                            context,
+                                            listen: false,
+                                          );
+
+                                      await sharedPrefProvider.logout();
+                                      if (context.mounted) {
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                const WelcomeScreen(),
+                                          ),
+                                          (route) => false,
+                                        );
+                                      }
                                     },
+
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.redAccent,
                                     ),
@@ -219,15 +232,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     listen: false,
                                   );
 
-                              await Provider.of<AuthProvider>(
-                                context,
-                                listen: false,
-                              ).signOut();
-
-                              // Clear persisted login state
                               await sharedPrefProvider.logout();
 
-                              // Arahkan ke halaman login setelah logout
                               if (context.mounted) {
                                 Navigator.pushAndRemoveUntil(
                                   context,
