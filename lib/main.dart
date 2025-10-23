@@ -16,6 +16,12 @@ import 'core/apptheme_provider.dart';
 import 'core/index_nav_provider.dart';
 import 'core/styles/app_theme.dart';
 
+// TODO: add event (also improve the ux such as fix the used icon, and text area for description)
+// TODO: admin page and functions
+// TODO: add calendar
+// TODO: notification
+// TODO: Chatbot integration
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
