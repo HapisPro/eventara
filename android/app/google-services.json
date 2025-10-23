@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "967089387025",
+    "project_id": "eventara-69f1d",
+    "storage_bucket": "eventara-69f1d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967089387025:android:37e393f01f7bffdeca63b0",
+        "android_client_info": {
+          "package_name": "com.example.eventara"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAclg5GGTHqEXytUZrogcKSe_8QzoTV3Rk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
