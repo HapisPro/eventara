@@ -77,12 +77,9 @@ class AuthChecker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<SharedPreferenceProvider>(
       builder: (context, sharedPrefProvider, child) {
-        // Check if user is logged in
         if (sharedPrefProvider.isLogin) {
-          debugPrint('✅ User is logged in: ${sharedPrefProvider.userEmail}');
           return const MainScreen();
         } else {
-          debugPrint('❌ User is not logged in');
           return const WelcomeScreen();
         }
       },
