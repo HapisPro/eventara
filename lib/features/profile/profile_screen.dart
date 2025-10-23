@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eventara/core/apptheme_provider.dart';
 import 'package:eventara/data/state/user_state.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
 import 'package:eventara/providers/auth_provider.dart';
@@ -7,6 +8,7 @@ import 'package:eventara/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
 import '../../../core/styles/app_color.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,7 +19,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  bool isDarkMode = false;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage(BuildContext context, UserProvider provider) async {
@@ -47,6 +48,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final themeProvider = Provider.of<AppThemeProvider>(context);
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
@@ -161,11 +164,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           title: "Dark Mode",
                           color: Colors.amber,
                           trailing: Switch(
-                            value: isDarkMode,
-                            onChanged: (v) {
-                              setState(() => isDarkMode = v);
+                            value: themeProvider.themeMode == ThemeMode.dark,
+                            onChanged: (value) {
+                              themeProvider.toggleTheme(value);
                             },
+                            activeColor: AppColor.primaryLight.color,
                           ),
+                          onTap: () {
+                            // Toggle theme when card is tapped
+                            final isDark =
+                                themeProvider.themeMode == ThemeMode.dark;
+                            themeProvider.toggleTheme(!isDark);
+                          },
                         ),
 
                         _buildMenuCard(
@@ -241,24 +251,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8),
-      child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            shape: BoxShape.circle,
-          ),
-          child: Icon(icon, color: color),
-        ),
-        title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-        trailing:
-            trailing ??
-            Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 18,
-              color: Colors.grey.shade400,
-            ),
+      child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, color: color),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
+              trailing ??
+                  Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 18,
+                    color: Colors.grey.shade400,
+                  ),
+            ],
+          ),
+        ),
       ),
     );
   }

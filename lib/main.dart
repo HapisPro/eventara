@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'core/apptheme_provider.dart';
 import 'core/index_nav_provider.dart';
 import 'core/styles/app_theme.dart';
 
@@ -23,6 +24,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AppThemeProvider()),
         ChangeNotifierProvider(create: (_) => IndexNavProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => EventProvider()),
@@ -39,13 +41,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Eventara',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      home: const WelcomeScreen(),
-      debugShowCheckedModeBanner: false,
+    return Consumer<AppThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          title: 'Eventara',
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: themeProvider.themeMode,
+          home: const WelcomeScreen(),
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 }
