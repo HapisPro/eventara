@@ -3,7 +3,9 @@ import 'package:eventara/data/models/event_model.dart';
 class EventFilter {
   static List<EventModel> filterUpcoming(List<EventModel> events) {
     final now = DateTime.now();
-    return events.where((e) => e.date.isAfter(now)).toList();
+    return events.where((e) {
+      return e.startTime.isAfter(now);
+    }).toList();
   }
 
   static List<EventModel> filterLive(List<EventModel> events) {
@@ -12,6 +14,14 @@ class EventFilter {
       final start = e.startTime;
       final end = e.startTime.add(const Duration(hours: 4));
       return now.isAfter(start) && now.isBefore(end);
+    }).toList();
+  }
+
+  static List<EventModel> filterEnded(List<EventModel> events) {
+    final now = DateTime.now();
+    return events.where((e) {
+      final end = e.startTime.add(const Duration(hours: 12));
+      return now.isAfter(end);
     }).toList();
   }
 

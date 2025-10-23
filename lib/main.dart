@@ -1,7 +1,7 @@
 import 'package:eventara/core/shared_preference_provider.dart';
-import 'package:eventara/data/services/shared_preferences_service.dart';
 import 'package:eventara/data/services/bookmark_service.dart';
 import 'package:eventara/data/services/local_notification_service.dart';
+import 'package:eventara/data/services/shared_preferences_service.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
 import 'package:eventara/main_screen.dart';
 import 'package:eventara/providers/auth_provider.dart';
@@ -63,9 +63,8 @@ void main() async {
             ..configureLocalTimeZone(),
         ),
         ChangeNotifierProvider(
-          create: (context) => NotificationProvider(
-            context.read<LocalNotificationService>(),
-          ),
+          create: (context) =>
+              NotificationProvider(context.read<LocalNotificationService>()),
         ),
       ],
       child: MainApp(),

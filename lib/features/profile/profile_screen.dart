@@ -5,7 +5,6 @@ import 'package:eventara/core/apptheme_provider.dart';
 import 'package:eventara/core/shared_preference_provider.dart';
 import 'package:eventara/data/state/user_state.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
-import 'package:eventara/providers/auth_provider.dart';
 import 'package:eventara/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
