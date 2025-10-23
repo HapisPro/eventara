@@ -1,5 +1,6 @@
 import 'package:eventara/data/services/auth_service.dart';
 import 'package:eventara/data/state/auth_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -54,6 +55,13 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void resetState() {
+    _state = AuthInitial();
+    notifyListeners();
+  }
+
+  Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+    _userData = null;
     _state = AuthInitial();
     notifyListeners();
   }

@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventara/data/models/event_model.dart';
 
-import 'dart:io';
 import 'supabase_storage_service.dart';
 
 class EventService {
@@ -30,5 +31,31 @@ class EventService {
     return snapshot.docs
         .map((doc) => EventModel.fromMap(doc.data(), doc.id))
         .toList();
+  }
+
+  Future<List<EventModel>> getPendingEvents() async {
+    final snapshot = await _firestore
+        .collection('events')
+        .where('status', isEqualTo: 'pending')
+        .orderBy('createdAt', descending: true)
+        .get();
+
+    return snapshot.docs
+        .map((doc) => EventModel.fromMap(doc.data(), doc.id))
+        .toList();
+  }
+
+  Future<void> approveEvent(String eventId) async {
+    await _firestore.collection('events').doc(eventId).update({
+      'status': 'approve',
+      'approvedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> rejectEvent(String eventId) async {
+    await _firestore.collection('events').doc(eventId).update({
+      'status': 'rejected',
+      'rejectedAt': FieldValue.serverTimestamp(),
+    });
   }
 }

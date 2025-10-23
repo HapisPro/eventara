@@ -11,6 +11,7 @@ class SharedPreferenceProvider extends ChangeNotifier {
   String? _userId;
   String? _userEmail;
   String? _userName;
+  String? _userRole;
 
   /// Check if user is currently logged in
   bool get isLogin => _service.isLogin ?? _isLogin;
@@ -24,22 +25,37 @@ class SharedPreferenceProvider extends ChangeNotifier {
   /// Get current user name/username
   String? get userName => _service.userName ?? _userName;
 
+  /// Get current user role
+  String? get userRole => _service.userRole ?? _userRole;
+
   /// Initialize provider by loading saved preferences
   void init() {
     _isLogin = _service.isLogin ?? false;
     _userId = _service.userId;
     _userEmail = _service.userEmail;
     _userName = _service.userName;
+    _userRole = _service.userRole;
     notifyListeners();
   }
 
   /// Login user and persist the state
-  Future<void> login({String? userId, String? email, String? userName}) async {
-    await _service.login(userId: userId, email: email, userName: userName);
+  Future<void> login({
+    String? userId,
+    String? email,
+    String? userName,
+    String? role,
+  }) async {
+    await _service.login(
+      userId: userId,
+      email: email,
+      userName: userName,
+      role: role,
+    );
     _isLogin = true;
     _userId = userId;
     _userEmail = email;
     _userName = userName;
+    _userRole = role;
     notifyListeners();
   }
 
@@ -50,6 +66,7 @@ class SharedPreferenceProvider extends ChangeNotifier {
     _userId = null;
     _userEmail = null;
     _userName = null;
+    _userRole = null;
     notifyListeners();
   }
 
@@ -60,6 +77,7 @@ class SharedPreferenceProvider extends ChangeNotifier {
     _userId = null;
     _userEmail = null;
     _userName = null;
+    _userRole = null;
     notifyListeners();
   }
 }
