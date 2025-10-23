@@ -68,6 +68,4 @@ class AuthService {
       throw Exception('Gagal membuat akun: $e');
     }
   }
-
-  Future<void> signOut() async => await _auth.signOut();
 }

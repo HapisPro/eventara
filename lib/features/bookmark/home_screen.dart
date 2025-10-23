@@ -5,8 +5,8 @@ import 'package:eventara/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../widgets/card_widget.dart';
-import '../widgets/live_event_widget.dart';
+import '../home/widgets/card_widget.dart';
+import '../home/widgets/live_event_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -101,8 +101,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   const SizedBox(height: 24),
-
-                  // Search bar
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Container(
@@ -120,6 +118,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: TextField(
                         controller: _searchController,
+                        onChanged: (value) {
+                          // Panggil provider agar hasil pencarian langsung di-update
+                          final homeProvider = Provider.of<HomeProvider>(
+                            context,
+                            listen: false,
+                          );
+                          homeProvider.searchEvents(value);
+                        },
                         style: TextStyle(color: theme.colorScheme.onSurface),
                         decoration: InputDecoration(
                           hintText: 'Cari event menarik...',
@@ -131,6 +137,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: theme.colorScheme.primary,
                             size: 24,
                           ),
+                          suffixIcon: _searchController.text.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.close_rounded),
+                                  color: theme.colorScheme.onSurface
+                                      .withOpacity(0.6),
+                                  onPressed: () {
+                                    _searchController.clear();
+                                    final homeProvider =
+                                        Provider.of<HomeProvider>(
+                                          context,
+                                          listen: false,
+                                        );
+                                    homeProvider.searchEvents('');
+                                  },
+                                )
+                              : null,
                           filled: true,
                           fillColor: theme.colorScheme.surface,
                           border: OutlineInputBorder(
@@ -228,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         final event = homeProvider.upcomingEvents[index];
                         return CardWidget(
                           title: event.title,
-                          location: "${event.city}, ${event.province}",
+                          location: event.province,
                           dateTime:
                               "${event.startTime.hour}:${event.startTime.minute.toString().padLeft(2, '0')}",
                           imageUrl: event.imageUrl,
@@ -250,36 +272,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Empty event
                   if (homeProvider.liveEvents.isEmpty &&
                       homeProvider.upcomingEvents.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.all(40),
-                      child: Column(
-                        children: [
-                          Icon(
-                            Icons.event_busy_rounded,
-                            size: 80,
-                            color: theme.colorScheme.onBackground.withOpacity(
-                              0.3,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'Belum ada event tersedia',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: theme.colorScheme.onBackground,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Event baru akan segera hadir!',
-                            style: TextStyle(
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 40,
+                        ), 
+                        child: Column(
+                          mainAxisAlignment:
+                              MainAxisAlignment.center, 
+                          crossAxisAlignment:
+                              CrossAxisAlignment.center, 
+                          children: [
+                            Icon(
+                              Icons.event_busy_rounded,
+                              size: 80,
                               color: theme.colorScheme.onBackground.withOpacity(
-                                0.6,
+                                0.3,
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 16),
+                            Text(
+                              'Belum ada event tersedia',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: theme.colorScheme.onBackground,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                 ],

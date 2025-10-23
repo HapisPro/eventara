@@ -1,10 +1,14 @@
 import 'package:eventara/core/shared_preference_provider.dart';
 import 'package:eventara/data/services/shared_preferences_service.dart';
+import 'package:eventara/data/services/bookmark_service.dart';
+import 'package:eventara/data/services/local_notification_service.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
 import 'package:eventara/main_screen.dart';
 import 'package:eventara/providers/auth_provider.dart';
+import 'package:eventara/providers/bookmark_provider.dart';
 import 'package:eventara/providers/event_provider.dart';
 import 'package:eventara/providers/home_provider.dart';
+import 'package:eventara/providers/notification_provider.dart';
 import 'package:eventara/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +53,20 @@ void main() async {
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
+
+        ChangeNotifierProvider(
+          create: (_) => BookmarkProvider(BookmarkService()),
+        ),
+        Provider<LocalNotificationService>(
+          create: (_) => LocalNotificationService()
+            ..init()
+            ..configureLocalTimeZone(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => NotificationProvider(
+            context.read<LocalNotificationService>(),
+          ),
+        ),
       ],
       child: MainApp(),
     ),

@@ -1,5 +1,5 @@
+import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/core/shared_preference_provider.dart';
-import 'package:eventara/core/styles/app_color.dart';
 import 'package:eventara/data/state/auth_state.dart';
 import 'package:eventara/features/auth/sign_up_screen.dart';
 import 'package:eventara/features/auth/widgets/auth_header.dart';
@@ -48,14 +48,8 @@ class _SignInScreenState extends State<SignInScreen> {
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (state is AuthError) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: AppColor.error.color,
-                  ),
-                );
+              AppSnackBarWidget.showError(context, state.message);
+
               provider.resetState();
             } else if (state is AuthSuccess) {
               // Save login state to SharedPreferences
@@ -71,14 +65,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 userName: userData?['username'] ?? state.username,
               );
 
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Text('Login berhasil! Halo, ${state.username}'),
-                    backgroundColor: AppColor.success.color,
-                  ),
-                );
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (_) => const MainScreen()),

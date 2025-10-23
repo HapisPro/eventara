@@ -1,3 +1,4 @@
+import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/core/styles/app_color.dart';
 import 'package:eventara/data/state/auth_state.dart';
 import 'package:eventara/features/auth/sign_in_screen.dart';
@@ -36,11 +37,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _onRegister(AuthProvider provider) {
     if (_formKey.currentState!.validate()) {
       if (selectedRole == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Silakan pilih role terlebih dahulu'),
-            backgroundColor: AppColor.error.color,
-          ),
+        AppSnackBarWidget.showWarning(
+          context,
+          "Silahkan pilih role terlebih dahulu",
         );
         return;
       }
@@ -75,21 +74,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     if (state is AuthError) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(state.message),
-                          backgroundColor: AppColor.error.color,
-                        ),
-                      );
+                      AppSnackBarWidget.showError(context, state.message);
                       authProvider.resetState();
                     } else if (state is AuthSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Akun berhasil dibuat! Selamat datang ${state.username}',
-                          ),
-                          backgroundColor: AppColor.success.color,
-                        ),
+                      AppSnackBarWidget.showSuccess(
+                        context,
+                        'Akun berhasil dibuat! Selamat datang ${state.username}',
                       );
                       Navigator.pushReplacement(
                         context,
