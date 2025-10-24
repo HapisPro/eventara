@@ -26,6 +26,9 @@ dependencies:
   path: ^1.9.1
   timezone: ^0.10.0
   awesome_snackbar_content: ^0.1.8
+  url_launcher: ^6.3.0
+  google_fonts: ^6.1.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -37,3 +40,11 @@ flutter:
   assets:
     - assets/
     - assets/vector/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/eventara_logo.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/eventara_logo.png"

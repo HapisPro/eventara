@@ -1,11 +1,13 @@
 import 'package:eventara/core/styles/app_color.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Light Theme
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
+      textTheme: GoogleFonts.poppinsTextTheme(),
       brightness: Brightness.light,
       colorScheme: ColorScheme.light(
         primary: AppColor.primary.color,
@@ -64,6 +66,10 @@ class AppTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColor.primary.color,
           foregroundColor: Colors.white,
+          textStyle: GoogleFonts.poppins(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -79,6 +85,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      textTheme: GoogleFonts.poppinsTextTheme(),
       colorScheme: ColorScheme.dark(
         primary: AppColor.primaryLight.color,
         secondary: AppColor.accentLight.color,
@@ -135,9 +142,13 @@ class AppTheme {
       // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColor.primary.color, // #0097C5 (cyan asli)
+          backgroundColor: AppColor.primary.color,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
+          textStyle: GoogleFonts.poppins(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),

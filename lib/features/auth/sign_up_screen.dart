@@ -1,5 +1,4 @@
 import 'package:eventara/core/app_snackbar_widget.dart';
-import 'package:eventara/core/styles/app_color.dart';
 import 'package:eventara/data/state/auth_state.dart';
 import 'package:eventara/features/auth/sign_in_screen.dart';
 import 'package:eventara/features/auth/widgets/auth_header.dart';
