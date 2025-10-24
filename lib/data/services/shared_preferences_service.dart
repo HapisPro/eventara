@@ -10,6 +10,7 @@ class SharedPreferencesService {
   static const String _keyUserId = "USER_ID";
   static const String _keyUserEmail = "USER_EMAIL";
   static const String _keyUserName = "USER_NAME";
+  static const String _keyUserRole = "USER_ROLE";
 
   /// Check if user is logged in
   bool? get isLogin => _preferences.getBool(_keyLogin);
@@ -23,8 +24,16 @@ class SharedPreferencesService {
   /// Get stored user name/username
   String? get userName => _preferences.getString(_keyUserName);
 
+  /// Get stored user role
+  String? get userRole => _preferences.getString(_keyUserRole);
+
   /// Mark user as logged in and store user data
-  Future<void> login({String? userId, String? email, String? userName}) async {
+  Future<void> login({
+    String? userId,
+    String? email,
+    String? userName,
+    String? role,
+  }) async {
     try {
       await _preferences.setBool(_keyLogin, true);
       if (userId != null) {
@@ -35,6 +44,9 @@ class SharedPreferencesService {
       }
       if (userName != null) {
         await _preferences.setString(_keyUserName, userName);
+      }
+      if (role != null) {
+        await _preferences.setString(_keyUserRole, role);
       }
     } catch (e) {
       throw Exception("Failed to save login state: $e");
@@ -48,6 +60,7 @@ class SharedPreferencesService {
       await _preferences.remove(_keyUserId);
       await _preferences.remove(_keyUserEmail);
       await _preferences.remove(_keyUserName);
+      await _preferences.remove(_keyUserRole);
     } catch (e) {
       throw Exception("Failed to clear login state: $e");
     }

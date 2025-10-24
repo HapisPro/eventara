@@ -1,9 +1,11 @@
 import 'package:eventara/core/shared_preference_provider.dart';
-import 'package:eventara/data/services/shared_preferences_service.dart';
 import 'package:eventara/data/services/bookmark_service.dart';
 import 'package:eventara/data/services/local_notification_service.dart';
+import 'package:eventara/data/services/shared_preferences_service.dart';
+import 'package:eventara/features/admin/admin_screen.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
 import 'package:eventara/main_screen.dart';
+import 'package:eventara/providers/admin_provider.dart';
 import 'package:eventara/providers/auth_provider.dart';
 import 'package:eventara/providers/bookmark_provider.dart';
 import 'package:eventara/providers/event_provider.dart';
@@ -12,6 +14,7 @@ import 'package:eventara/providers/notification_provider.dart';
 import 'package:eventara/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -20,15 +23,17 @@ import 'core/apptheme_provider.dart';
 import 'core/index_nav_provider.dart';
 import 'core/styles/app_theme.dart';
 
-// TODO: add event (also improve the ux such as fix the used icon, and text area for description)
-// TODO: admin page and functions
-// TODO: add calendar
-// TODO: notification
+// TODO: Check other things & clean up codes
+// TODO: add event, improve the ux such as fix the used icon, and text area for description
+// TODO: add calendar (use link google calendar)
 // TODO: Chatbot integration
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  // Initialize date formatting for Indonesian locale
+  await initializeDateFormatting('id', null);
 
   await Supabase.initialize(
     url: 'https://eqeurwwtvrfipeczfpru.supabase.co',
@@ -53,6 +58,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => EventProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => AdminProvider()),
 
         ChangeNotifierProvider(
           create: (_) => BookmarkProvider(BookmarkService()),
@@ -63,9 +69,8 @@ void main() async {
             ..configureLocalTimeZone(),
         ),
         ChangeNotifierProvider(
-          create: (context) => NotificationProvider(
-            context.read<LocalNotificationService>(),
-          ),
+          create: (context) =>
+              NotificationProvider(context.read<LocalNotificationService>()),
         ),
       ],
       child: MainApp(),
@@ -102,7 +107,12 @@ class AuthChecker extends StatelessWidget {
     return Consumer<SharedPreferenceProvider>(
       builder: (context, sharedPrefProvider, child) {
         if (sharedPrefProvider.isLogin) {
-          return const MainScreen();
+          final userRole = sharedPrefProvider.userRole ?? 'user';
+          if (userRole == 'Admin') {
+            return const AdminScreen();
+          } else {
+            return const MainScreen();
+          }
         } else {
           return const WelcomeScreen();
         }

@@ -1,6 +1,7 @@
 import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/core/shared_preference_provider.dart';
 import 'package:eventara/data/state/auth_state.dart';
+import 'package:eventara/features/admin/admin_screen.dart';
 import 'package:eventara/features/auth/sign_up_screen.dart';
 import 'package:eventara/features/auth/widgets/auth_header.dart';
 import 'package:eventara/features/auth/widgets/custom_text_field.dart';
@@ -59,16 +60,28 @@ class _SignInScreenState extends State<SignInScreen> {
               );
 
               final userData = provider.userData;
+              final userRole = userData?['role'] ?? 'user';
+
               sharedPrefProvider.login(
                 userId: userData?['uid'] ?? '',
                 email: userData?['email'] ?? '',
                 userName: userData?['username'] ?? state.username,
+                role: userRole,
               );
 
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const MainScreen()),
-              );
+              // Redirect based on role
+              if (userRole == 'Admin') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const AdminScreen()),
+                );
+              } else {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const MainScreen()),
+                );
+              }
+
               provider.resetState();
             }
           });
