@@ -9,6 +9,7 @@ class HomeProvider extends ChangeNotifier {
   String? userName;
   List<EventModel> liveEvents = [];
   List<EventModel> upcomingEvents = [];
+  List<EventModel> endedEvents = [];
   List<EventModel> allEvents = [];
   bool isLoading = false;
 
@@ -21,6 +22,7 @@ class HomeProvider extends ChangeNotifier {
 
       liveEvents = EventFilter.filterLive(allEvents);
       upcomingEvents = EventFilter.filterUpcoming(allEvents);
+      endedEvents = EventFilter.filterEnded(allEvents);
     } finally {
       isLoading = false;
       notifyListeners();
@@ -31,10 +33,12 @@ class HomeProvider extends ChangeNotifier {
     if (query.isEmpty) {
       liveEvents = EventFilter.filterLive(allEvents);
       upcomingEvents = EventFilter.filterUpcoming(allEvents);
+      endedEvents = EventFilter.filterEnded(allEvents);
     } else {
       final filtered = EventFilter.search(allEvents, query);
       liveEvents = EventFilter.filterLive(filtered);
       upcomingEvents = EventFilter.filterUpcoming(filtered);
+      endedEvents = EventFilter.filterEnded(filtered);
     }
     notifyListeners();
   }
