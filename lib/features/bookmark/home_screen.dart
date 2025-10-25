@@ -1,5 +1,5 @@
 import 'package:eventara/data/state/user_state.dart';
-import 'package:eventara/features/detail/detail_page_eventara.dart';
+import 'package:eventara/features/detail/detail_page.dart';
 import 'package:eventara/providers/home_provider.dart';
 import 'package:eventara/providers/user_provider.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
         _isSearching = _searchController.text.isNotEmpty;
       });
     });
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       final homeProvider = Provider.of<HomeProvider>(context, listen: false);
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       homeProvider.loadHomeData();
@@ -130,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Center(
                       child: Text(
                         "User belum tersedia",
-                        style: TextStyle(color: theme.colorScheme.onBackground),
+                        style: TextStyle(color: theme.colorScheme.onSurface),
                       ),
                     ),
                   );
@@ -152,8 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Selamat Datang ${user.username}',
                             style: TextStyle(
                               fontSize: 24,
-                              color: theme.colorScheme.onBackground.withOpacity(
-                                0.7,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.7,
                               ),
                               fontWeight: FontWeight.w600,
                             ),
@@ -172,8 +173,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           boxShadow: [
                             BoxShadow(
                               color: isDark
-                                  ? Colors.black.withOpacity(0.3)
-                                  : theme.colorScheme.primary.withOpacity(0.1),
+                                  ? Colors.black.withValues(alpha: 0.3)
+                                  : theme.colorScheme.primary.withValues(
+                                      alpha: 0.1,
+                                    ),
                               blurRadius: 12,
                               offset: const Offset(0, 4),
                             ),
@@ -182,7 +185,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: TextField(
                           controller: _searchController,
                           onChanged: (value) {
-                            // Panggil provider agar hasil pencarian langsung di-update
                             final homeProvider = Provider.of<HomeProvider>(
                               context,
                               listen: false,
@@ -193,8 +195,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: InputDecoration(
                             hintText: 'Cari event menarik...',
                             hintStyle: TextStyle(
-                              color: theme.colorScheme.onSurface.withOpacity(
-                                0.5,
+                              color: theme.colorScheme.onSurface.withValues(
+                                alpha: 0.5,
                               ),
                             ),
                             prefixIcon: Icon(
@@ -206,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? IconButton(
                                     icon: const Icon(Icons.close_rounded),
                                     color: theme.colorScheme.onSurface
-                                        .withOpacity(0.6),
+                                        .withValues(alpha: 0.6),
                                     onPressed: () {
                                       _searchController.clear();
                                       final homeProvider =
@@ -227,8 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
                               borderSide: BorderSide(
-                                color: theme.colorScheme.primary.withOpacity(
-                                  0.1,
+                                color: theme.colorScheme.primary.withValues(
+                                  alpha: 0.1,
                                 ),
                                 width: 1,
                               ),
@@ -250,7 +252,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
 
                     const SizedBox(height: 28),
-                    //live Event section
                     if (homeProvider.liveEvents.isNotEmpty) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -260,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Live Event',
                             style: theme.textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: theme.colorScheme.onBackground,
+                              color: theme.colorScheme.onSurface,
                             ),
                           ),
                         ),
@@ -285,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) =>
-                                        DetailPageEventara(eventData: event),
+                                        DetailPage(eventData: event),
                                   ),
                                 );
                               },
@@ -296,7 +297,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 32),
                     ],
 
-                    // Upcoming Events Section
                     if (homeProvider.upcomingEvents.isNotEmpty) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Event akan datang',
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onBackground,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -325,8 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (_) =>
-                                      DetailPageEventara(eventData: event),
+                                  builder: (_) => DetailPage(eventData: event),
                                 ),
                               );
                             },
@@ -336,7 +335,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 32),
                     ],
 
-                    // Ended Events Section
                     if (homeProvider.endedEvents.isNotEmpty) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -344,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Event berakhir',
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onBackground,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                       ),
@@ -368,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) =>
-                                        DetailPageEventara(eventData: event),
+                                        DetailPage(eventData: event),
                                   ),
                                 );
                               },
@@ -379,7 +377,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 32),
                     ],
 
-                    // Empty event
                     if (homeProvider.liveEvents.isEmpty &&
                         homeProvider.upcomingEvents.isEmpty &&
                         homeProvider.endedEvents.isEmpty)
@@ -393,8 +390,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               Icon(
                                 Icons.event_busy_rounded,
                                 size: 80,
-                                color: theme.colorScheme.onBackground
-                                    .withOpacity(0.3),
+                                color: theme.colorScheme.onSurface.withValues(
+                                  alpha: 0.3,
+                                ),
                               ),
                               const SizedBox(height: 16),
                               Text(
@@ -403,7 +401,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
-                                  color: theme.colorScheme.onBackground,
+                                  color: theme.colorScheme.onSurface,
                                 ),
                               ),
                             ],

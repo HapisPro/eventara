@@ -11,7 +11,6 @@ class AuthProvider extends ChangeNotifier {
 
   bool get isLoading => _state is AuthLoading;
 
-  // Store user data for persist login
   Map<String, dynamic>? _userData;
   Map<String, dynamic>? get userData => _userData;
 
@@ -21,7 +20,7 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       final userData = await _authService.signIn(email, password);
-      _userData = userData; // Store user data
+      _userData = userData;
       _state = AuthSuccess(userData['username'] ?? 'User');
     } catch (e) {
       _state = AuthError(e.toString().replaceFirst('Exception: ', ''));

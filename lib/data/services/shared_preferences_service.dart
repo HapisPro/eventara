@@ -1,6 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Service to manage persistent login state using SharedPreferences
 class SharedPreferencesService {
   final SharedPreferences _preferences;
 
@@ -12,22 +11,16 @@ class SharedPreferencesService {
   static const String _keyUserName = "USER_NAME";
   static const String _keyUserRole = "USER_ROLE";
 
-  /// Check if user is logged in
   bool? get isLogin => _preferences.getBool(_keyLogin);
 
-  /// Get stored user ID
   String? get userId => _preferences.getString(_keyUserId);
 
-  /// Get stored user email
   String? get userEmail => _preferences.getString(_keyUserEmail);
 
-  /// Get stored user name/username
   String? get userName => _preferences.getString(_keyUserName);
 
-  /// Get stored user role
   String? get userRole => _preferences.getString(_keyUserRole);
 
-  /// Mark user as logged in and store user data
   Future<void> login({
     String? userId,
     String? email,
@@ -53,7 +46,6 @@ class SharedPreferencesService {
     }
   }
 
-  /// Mark user as logged out and clear user data
   Future<void> logout() async {
     try {
       await _preferences.setBool(_keyLogin, false);
@@ -66,7 +58,6 @@ class SharedPreferencesService {
     }
   }
 
-  /// Clear all stored preferences
   Future<void> clearAll() async {
     try {
       await _preferences.clear();

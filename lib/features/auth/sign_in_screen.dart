@@ -1,5 +1,5 @@
 import 'package:eventara/core/app_snackbar_widget.dart';
-import 'package:eventara/core/shared_preference_provider.dart';
+import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/data/state/auth_state.dart';
 import 'package:eventara/features/admin/admin_screen.dart';
 import 'package:eventara/features/auth/sign_up_screen.dart';
@@ -53,7 +53,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
               provider.resetState();
             } else if (state is AuthSuccess) {
-              // Save login state to SharedPreferences
               final sharedPrefProvider = Provider.of<SharedPreferenceProvider>(
                 context,
                 listen: false,
@@ -69,7 +68,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 role: userRole,
               );
 
-              // Redirect based on role
               if (userRole == 'Admin') {
                 Navigator.pushReplacement(
                   context,

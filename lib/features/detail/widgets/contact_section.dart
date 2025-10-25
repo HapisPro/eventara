@@ -23,7 +23,7 @@ class ContactSection extends StatelessWidget {
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: theme.colorScheme.primary.withOpacity(0.2),
+          color: theme.colorScheme.primary.withValues(alpha: 0.2),
           width: 1,
         ),
       ),
@@ -32,7 +32,7 @@ class ContactSection extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppColor.accent.color.withOpacity(0.1),
+              color: AppColor.accent.color.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: AppColor.accent.color, size: 20),
@@ -43,7 +43,7 @@ class ContactSection extends StatelessWidget {
               label,
               style: TextStyle(
                 fontSize: 15,
-                color: theme.colorScheme.onBackground,
+                color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -51,7 +51,7 @@ class ContactSection extends StatelessWidget {
           if (isPhone)
             Icon(
               Icons.phone_in_talk_rounded,
-              color: theme.colorScheme.primary.withOpacity(0.5),
+              color: theme.colorScheme.primary.withValues(alpha: 0.5),
               size: 20,
             ),
         ],

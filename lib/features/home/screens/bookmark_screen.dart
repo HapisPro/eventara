@@ -1,4 +1,4 @@
-import 'package:eventara/features/detail/detail_page_eventara.dart';
+import 'package:eventara/features/detail/detail_page.dart';
 import 'package:eventara/features/home/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,13 +25,13 @@ class BookmarkScreen extends StatelessWidget {
                   Icon(
                     Icons.bookmark_border,
                     size: 80,
-                    color: theme.colorScheme.primary.withOpacity(0.5),
+                    color: theme.colorScheme.primary.withValues(alpha: 0.5),
                   ),
                   const SizedBox(height: 12),
                   Text(
                     "Belum ada event yang dibookmark",
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
                     ),
                   ),
                 ],
@@ -52,7 +52,7 @@ class BookmarkScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => DetailPageEventara(eventData: event),
+                      builder: (_) => DetailPage(eventData: event),
                     ),
                   );
                 },

@@ -42,7 +42,7 @@ class WelcomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   height: 1.3,
                   letterSpacing: 0.5,
-                  color: theme.colorScheme.onBackground,
+                  color: theme.colorScheme.onSurface
                 ),
               ),
             ),
@@ -54,7 +54,7 @@ class WelcomeScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14.5,
-                  color: theme.colorScheme.onBackground.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   height: 1.6,
                 ),
               ),

@@ -35,7 +35,7 @@ class LiveEventWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: theme.colorScheme.primary.withOpacity(0.3),
+              color: theme.colorScheme.primary.withValues(alpha: 0.3),
               blurRadius: 12,
               offset: const Offset(0, 6),
             ),
@@ -66,8 +66,8 @@ class LiveEventWidget extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Colors.transparent,
-                    Colors.black.withOpacity(0.4),
-                    Colors.black.withOpacity(0.85),
+                    Colors.black.withValues(alpha: 0.4),
+                    Colors.black.withValues(alpha: 0.85),
                   ],
                   stops: const [0.0, 0.5, 1.0],
                 ),
@@ -89,7 +89,7 @@ class LiveEventWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColor.accent.color.withOpacity(0.5),
+                      color: AppColor.accent.color.withValues(alpha: 0.5),
                       blurRadius: 8,
                       spreadRadius: 0,
                     ),
@@ -135,7 +135,10 @@ class LiveEventWidget extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withOpacity(0.6)],
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.6),
+                    ],
                   ),
                 ),
                 child: Column(
@@ -167,7 +170,7 @@ class LiveEventWidget extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.location_city_rounded,
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           size: 16,
                         ),
                         const SizedBox(width: 6),
@@ -175,7 +178,7 @@ class LiveEventWidget extends StatelessWidget {
                           child: Text(
                             address,
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
+                              color: Colors.white.withValues(alpha: 0.9),
                               fontSize: 13,
                             ),
                             maxLines: 1,
@@ -189,14 +192,14 @@ class LiveEventWidget extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.location_on_rounded,
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           size: 16,
                         ),
                         const SizedBox(width: 6),
                         Text(
                           location,
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                             fontSize: 13,
                           ),
                         ),
@@ -220,7 +223,7 @@ class LiveEventWidget extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [
             theme.colorScheme.primary,
-            theme.colorScheme.primary.withOpacity(0.7),
+            theme.colorScheme.primary.withValues(alpha: 0.7),
           ],
         ),
       ),

@@ -39,7 +39,6 @@ class AppThemeProvider extends ChangeNotifier {
     }
   }
 
-  // Set theme mode and save to SharedPreferences
   Future<void> setThemeMode(ThemeMode mode) async {
     if (_themeMode == mode) return;
 

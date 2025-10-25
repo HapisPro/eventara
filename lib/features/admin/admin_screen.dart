@@ -1,7 +1,7 @@
-import 'package:eventara/core/shared_preference_provider.dart';
+import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/features/admin/widgets/admin_event_card.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
-import 'package:eventara/features/detail/detail_page_eventara.dart';
+import 'package:eventara/features/detail/detail_page.dart';
 import 'package:eventara/providers/admin_provider.dart';
 import 'package:eventara/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +18,9 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      final adminProvider = Provider.of<AdminProvider>(context, listen: false);
-      adminProvider.loadPendingEvents();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<AdminProvider>().loadPendingEvents();
     });
   }
 
@@ -176,14 +176,16 @@ class _AdminScreenState extends State<AdminScreen> {
                         Icon(
                           Icons.check_circle_outline,
                           size: 80,
-                          color: theme.colorScheme.primary.withOpacity(0.5),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.5,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         Text(
                           'Tidak Ada Event Pending',
                           style: theme.textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onBackground,
+                            color: theme.colorScheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -211,7 +213,7 @@ class _AdminScreenState extends State<AdminScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => DetailPageEventara(eventData: event),
+                        builder: (_) => DetailPage(eventData: event),
                       ),
                     );
                   },

@@ -23,7 +23,6 @@ class CalendarUtils {
     final start = _formatDate(startTime);
     final end = _formatDate(endTime);
 
-    // Build URL with proper encoding
     final url =
         'https://calendar.google.com/calendar/u/0/r/eventedit?text=$encodedTitle'
         '&dates=$start/$end'
@@ -33,7 +32,6 @@ class CalendarUtils {
     final uri = Uri.parse(url);
 
     try {
-      // Try with platformDefaultBehavior mode first (works better on Android)
       if (await canLaunchUrl(uri)) {
         final launched = await launchUrl(uri, mode: LaunchMode.platformDefault);
 
@@ -48,7 +46,6 @@ class CalendarUtils {
         }
       }
 
-      // Fallback: Try with externalApplication mode
       if (await canLaunchUrl(uri)) {
         final launched = await launchUrl(
           uri,
@@ -66,7 +63,6 @@ class CalendarUtils {
         }
       }
 
-      // Fallback: Try shorter URL (without description and location)
       final shortUrl =
           'https://calendar.google.com/calendar/u/0/r/eventedit?text=$encodedTitle&dates=$start/$end';
       final shortUri = Uri.parse(shortUrl);
@@ -88,7 +84,6 @@ class CalendarUtils {
         }
       }
 
-      // If all attempts fail, show error
       if (context.mounted) {
         AppSnackBarWidget.showError(
           context,

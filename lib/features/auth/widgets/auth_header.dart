@@ -36,7 +36,7 @@ class AuthHeader extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
-            color: theme.colorScheme.onBackground,
+            color: theme.colorScheme.onSurface,
           ),
           textAlign: TextAlign.center,
         ),

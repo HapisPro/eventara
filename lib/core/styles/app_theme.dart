@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // Light Theme
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
@@ -21,7 +20,6 @@ class AppTheme {
       scaffoldBackgroundColor: AppColor.backgroundLight.color,
       cardColor: AppColor.surfaceLight.color,
 
-      // AppBar Theme
       appBarTheme: AppBarTheme(
         backgroundColor: AppColor.surfaceLight.color,
         elevation: 0,
@@ -33,7 +31,6 @@ class AppTheme {
         ),
       ),
 
-      // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColor.surfaceLight.color,
         selectedItemColor: AppColor.primary.color,
@@ -42,7 +39,6 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
       ),
 
-      // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColor.surfaceLight.color,
@@ -61,7 +57,6 @@ class AppTheme {
         ),
       ),
 
-      // Elevated Button Theme
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColor.primary.color,
@@ -80,7 +75,6 @@ class AppTheme {
     );
   }
 
-  // Dark Theme
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
@@ -99,7 +93,6 @@ class AppTheme {
       scaffoldBackgroundColor: AppColor.backgroundDark.color,
       cardColor: AppColor.surfaceDark.color,
 
-      // AppBar Theme
       appBarTheme: AppBarTheme(
         backgroundColor: AppColor.surfaceDark.color,
         elevation: 0,
@@ -111,7 +104,6 @@ class AppTheme {
         ),
       ),
 
-      // Bottom Navigation Bar Theme
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColor.surfaceDark.color,
         selectedItemColor: AppColor.primaryLight.color,
@@ -120,7 +112,6 @@ class AppTheme {
         type: BottomNavigationBarType.fixed,
       ),
 
-      // Input Decoration Theme
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColor.surfaceDark.color,
@@ -139,7 +130,7 @@ class AppTheme {
           borderSide: BorderSide(color: AppColor.error.color),
         ),
       ),
-      // Elevated Button Theme
+
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColor.primary.color,

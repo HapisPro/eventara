@@ -85,7 +85,6 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                           chatbotProvider.messages.length +
                           (chatbotProvider.isLoading ? 1 : 0),
                       itemBuilder: (context, index) {
-                        // Show typing indicator
                         if (index == chatbotProvider.messages.length &&
                             chatbotProvider.isLoading) {
                           return _buildTypingIndicator(primaryColor);
@@ -101,7 +100,6 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                 ),
               ),
 
-              // Input Field
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 decoration: BoxDecoration(
@@ -109,7 +107,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                   borderRadius: BorderRadius.circular(28),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: 0.1),
                       blurRadius: 10,
                       offset: const Offset(0, -2),
                     ),
@@ -155,13 +153,13 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                             gradient: LinearGradient(
                               colors: [
                                 primaryColor,
-                                primaryColor.withOpacity(0.8),
+                                primaryColor.withValues(alpha: 0.8),
                               ],
                             ),
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: primaryColor.withOpacity(0.4),
+                                color: primaryColor.withValues(alpha: 0.4),
                                 blurRadius: 8,
                                 offset: const Offset(0, 2),
                               ),
@@ -242,7 +240,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 5,
                       offset: const Offset(0, 2),
                     ),
@@ -275,7 +273,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [primaryColor, primaryColor.withOpacity(0.8)],
+            colors: [primaryColor, primaryColor.withValues(alpha: 0.8)],
           ),
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(18),
@@ -284,7 +282,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: primaryColor.withOpacity(0.3),
+              color: primaryColor.withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -334,7 +332,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 5,
                     offset: const Offset(0, 2),
                   ),
@@ -368,7 +366,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             width: 8,
             height: 8,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.5),
+              color: color.withValues(alpha: 0.5),
               shape: BoxShape.circle,
             ),
           ),

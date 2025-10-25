@@ -22,20 +22,20 @@ class InfoCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isHighlight
-            ? iconColor.withOpacity(0.1)
+            ? iconColor.withValues(alpha:0.1)
             : theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isHighlight
-              ? iconColor.withOpacity(0.3)
-              : theme.colorScheme.onSurface.withOpacity(0.1),
+              ? iconColor.withValues(alpha:0.3)
+              : theme.colorScheme.onSurface.withValues(alpha:0.1),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
             color: theme.brightness == Brightness.dark
-                ? Colors.black.withOpacity(0.2)
-                : Colors.black.withOpacity(0.05),
+                ? Colors.black.withValues(alpha:0.2)
+                : Colors.black.withValues(alpha:0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -47,7 +47,7 @@ class InfoCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withValues(alpha:0.1),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: iconColor, size: 24),
@@ -60,7 +60,7 @@ class InfoCard extends StatelessWidget {
                 content,
                 style: TextStyle(
                   fontSize: 15,
-                  color: theme.colorScheme.onBackground,
+                  color: theme.colorScheme.onSurface,
                   height: 1.5,
                   fontWeight: isHighlight ? FontWeight.w600 : FontWeight.normal,
                 ),

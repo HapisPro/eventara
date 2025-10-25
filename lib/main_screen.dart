@@ -17,7 +17,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  // Halaman sesuai index bottom navbar
   final List<Widget> _pages = [
     const HomeScreen(),
     const BookmarkScreen(),
@@ -45,8 +44,8 @@ class _MainScreenState extends State<MainScreen> {
               boxShadow: [
                 BoxShadow(
                   color: isDark
-                      ? Colors.black.withOpacity(0.3)
-                      : Colors.black.withOpacity(0.1),
+                      ? Colors.black.withValues(alpha: 0.3)
+                      : Colors.black.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),
@@ -76,8 +75,8 @@ class _MainScreenState extends State<MainScreen> {
                   showUnselectedLabels: false,
                   showSelectedLabels: true,
                   selectedItemColor: theme.colorScheme.primary,
-                  unselectedItemColor: theme.colorScheme.onSurface.withOpacity(
-                    0.6,
+                  unselectedItemColor: theme.colorScheme.onSurface.withValues(
+                    alpha: 0.6,
                   ),
                   selectedLabelStyle: const TextStyle(
                     fontWeight: FontWeight.w600,
@@ -90,8 +89,8 @@ class _MainScreenState extends State<MainScreen> {
                       label: "Home",
                       isActive: navProvider.idxBottomNavbar == 0,
                       activeColor: theme.colorScheme.primary,
-                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
-                        0.6,
+                      inactiveColor: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.6,
                       ),
                       isDark: isDark,
                     ),
@@ -100,8 +99,8 @@ class _MainScreenState extends State<MainScreen> {
                       label: "Bookmark",
                       isActive: navProvider.idxBottomNavbar == 1,
                       activeColor: theme.colorScheme.primary,
-                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
-                        0.6,
+                      inactiveColor: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.6,
                       ),
                       isDark: isDark,
                     ),
@@ -110,8 +109,8 @@ class _MainScreenState extends State<MainScreen> {
                       label: "Add Event",
                       isActive: navProvider.idxBottomNavbar == 2,
                       activeColor: theme.colorScheme.primary,
-                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
-                        0.6,
+                      inactiveColor: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.6,
                       ),
                       isCenter: true,
                       isDark: isDark,
@@ -121,8 +120,8 @@ class _MainScreenState extends State<MainScreen> {
                       label: "Asisten AI",
                       isActive: navProvider.idxBottomNavbar == 3,
                       activeColor: theme.colorScheme.primary,
-                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
-                        0.6,
+                      inactiveColor: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.6,
                       ),
                       isDark: isDark,
                     ),
@@ -131,8 +130,8 @@ class _MainScreenState extends State<MainScreen> {
                       label: "Profile",
                       isActive: navProvider.idxBottomNavbar == 4,
                       activeColor: theme.colorScheme.primary,
-                      inactiveColor: theme.colorScheme.onSurface.withOpacity(
-                        0.6,
+                      inactiveColor: theme.colorScheme.onSurface.withValues(
+                        alpha: 0.6,
                       ),
                       isDark: isDark,
                     ),
@@ -146,7 +145,6 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  /// Fungsi bantu untuk membuat item navbar dengan efek aktif
   BottomNavigationBarItem _buildNavItem({
     required IconData icon,
     required String label,
@@ -167,14 +165,17 @@ class _MainScreenState extends State<MainScreen> {
                 gradient: LinearGradient(
                   colors: isDark
                       ? [
-                          AppColor.primaryLight.color.withOpacity(0.9),
+                          AppColor.primaryLight.color.withValues(alpha: 0.9),
                           AppColor.primaryLight.color,
                         ]
-                      : [activeColor.withOpacity(0.9), const Color(0xFF00B4D8)],
+                      : [
+                          activeColor.withValues(alpha: 0.9),
+                          const Color(0xFF00B4D8),
+                        ],
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: activeColor.withOpacity(0.3),
+                    color: activeColor.withValues(alpha: 0.3),
                     blurRadius: 10,
                     offset: const Offset(0, 3),
                   ),

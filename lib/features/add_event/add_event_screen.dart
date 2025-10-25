@@ -101,7 +101,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Image Upload
+
                   ImageUploadBox(
                     image: _pickedImage,
                     onTap: _pickImageFromGallery,
@@ -109,7 +109,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Event Information Section
                   _buildSectionTitle("Informasi Event", theme),
                   const SizedBox(height: 12),
 
@@ -125,13 +124,13 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   CustomTextField(
                     controller: _descController,
                     label: "Deskripsi",
+                    maxLines: 3,
                     icon: Icons.description_rounded,
                     validator: (v) =>
                         v!.isEmpty ? "Deskripsi wajib diisi" : null,
                   ),
                   const SizedBox(height: 24),
 
-                  // Location Section
                   _buildSectionTitle("Lokasi", theme),
                   const SizedBox(height: 12),
 
@@ -168,7 +167,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Schedule Section
                   _buildSectionTitle("Jadwal", theme),
                   const SizedBox(height: 12),
 
@@ -188,7 +186,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   ),
                   const SizedBox(height: 24),
 
-                  // Ticket & Contact Section
                   _buildSectionTitle("Tiket & Kontak", theme),
                   const SizedBox(height: 12),
 
@@ -220,7 +217,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Submit Button
                   PrimaryButton(
                     text: "Simpan Event",
                     onPressed: () => _submit(context, provider),
@@ -253,7 +249,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
-            color: theme.colorScheme.onBackground,
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.9),
           ),
         ),
       ],

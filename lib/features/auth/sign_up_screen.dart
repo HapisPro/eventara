@@ -76,10 +76,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       AppSnackBarWidget.showError(context, state.message);
                       authProvider.resetState();
                     } else if (state is AuthSuccess) {
-                      AppSnackBarWidget.showSuccess(
-                        context,
-                        'Akun berhasil dibuat! Selamat datang ${state.username}',
-                      );
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (_) => const MainScreen()),
@@ -127,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         const SizedBox(height: 16),
                         DropdownButtonFormField<String>(
-                          value: selectedRole,
+                          initialValue: selectedRole,
                           dropdownColor: theme.colorScheme.surface,
                           decoration: InputDecoration(
                             labelText: 'Pilih Role',

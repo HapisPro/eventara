@@ -1,4 +1,4 @@
-import 'package:eventara/core/shared_preference_provider.dart';
+import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/data/services/bookmark_service.dart';
 import 'package:eventara/data/services/local_notification_service.dart';
 import 'package:eventara/data/services/shared_preferences_service.dart';
@@ -24,15 +24,12 @@ import 'core/apptheme_provider.dart';
 import 'core/index_nav_provider.dart';
 import 'core/styles/app_theme.dart';
 
-// TODO: Check other things & clean up codes
 // TODO: Fix bug bookmark that saving on all accounts instead of one
-// TODO: add event, improve the ux such as fix the used icon, and text area for description
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  // Initialize date formatting for Indonesian locale
   await initializeDateFormatting('id', null);
 
   await Supabase.initialize(
@@ -41,7 +38,6 @@ void main() async {
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVxZXVyd3d0dnJmaXBlY3pmcHJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwMDgwMDksImV4cCI6MjA3NjU4NDAwOX0.vAOe-u80IOV5ePpSoBeFVL1Z4eb8bSjy5PiXx7aR4TQ',
   );
 
-  // Initialize SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
   final sharedPreferencesService = SharedPreferencesService(sharedPreferences);
 
@@ -99,7 +95,6 @@ class MainApp extends StatelessWidget {
   }
 }
 
-// Widget to check authentication status
 class AuthChecker extends StatelessWidget {
   const AuthChecker({super.key});
 

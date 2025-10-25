@@ -20,7 +20,7 @@ class TextLink extends StatelessWidget {
     return Text.rich(
       TextSpan(
         text: normalText,
-        style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+        style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
         children: [
           TextSpan(
             text: linkText,

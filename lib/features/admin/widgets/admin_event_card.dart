@@ -31,7 +31,6 @@ class AdminEventCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image
             if (event.imageUrl != null)
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(
@@ -73,13 +72,11 @@ class AdminEventCard extends StatelessWidget {
                 ),
               ),
 
-            // Content
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
                   Text(
                     event.title,
                     style: theme.textTheme.titleLarge?.copyWith(
@@ -91,7 +88,6 @@ class AdminEventCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
 
-                  // Organizer
                   Row(
                     children: [
                       Icon(
@@ -114,7 +110,6 @@ class AdminEventCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
 
-                  // Location
                   Row(
                     children: [
                       Icon(
@@ -137,7 +132,6 @@ class AdminEventCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
 
-                  // Date & Time
                   Row(
                     children: [
                       Icon(
@@ -159,7 +153,6 @@ class AdminEventCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Action Buttons
                   Row(
                     children: [
                       Expanded(

@@ -31,7 +31,6 @@ class ChatbotProvider extends ChangeNotifier {
   }
 
   Future<void> _initialize() async {
-    // Add initial greeting
     _messages.add(
       ChatMessage(
         text: _geminiService.getInitialGreeting(),
@@ -41,7 +40,6 @@ class ChatbotProvider extends ChangeNotifier {
     );
     notifyListeners();
 
-    // Load approved events
     await _loadApprovedEvents();
   }
 
@@ -53,25 +51,22 @@ class ChatbotProvider extends ChangeNotifier {
     }
   }
 
-  /// Convert EventModel to Map for RAG context
   List<Map<String, dynamic>> _eventsToRagContext() {
     return _approvedEvents.map((event) {
       return {
         'title': event.title,
-        'date': event.startTime.toString().split(' ')[0], // YYYY-MM-DD
+        'date': event.startTime.toString().split(' ')[0],
         'location': '${event.city}, ${event.province}',
         'description': event.description,
-        'status': 'approve', // All events from getApprovedEvents are approved
+        'status': 'approve',
         'organizer': event.organizer,
       };
     }).toList();
   }
 
-  /// Send a message to the chatbot
   Future<void> sendMessage(String message) async {
     if (message.trim().isEmpty) return;
 
-    // Add user message
     _messages.add(
       ChatMessage(
         text: message.trim(),
@@ -81,21 +76,16 @@ class ChatbotProvider extends ChangeNotifier {
     );
     notifyListeners();
 
-    // Set loading state
     _isLoading = true;
     notifyListeners();
 
     try {
-      // Reload events to get latest data
       await _loadApprovedEvents();
 
-      // Get RAG context
       final ragContext = _eventsToRagContext();
 
-      // Get response from Gemini
       final response = await _geminiService.sendMessage(message, ragContext);
 
-      // Add bot response
       _messages.add(
         ChatMessage(text: response, isUser: false, timestamp: DateTime.now()),
       );
@@ -114,7 +104,6 @@ class ChatbotProvider extends ChangeNotifier {
     }
   }
 
-  /// Clear chat history
   void clearChat() {
     _messages.clear();
     _messages.add(
@@ -127,7 +116,6 @@ class ChatbotProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Refresh events data
   Future<void> refreshEvents() async {
     await _loadApprovedEvents();
     notifyListeners();

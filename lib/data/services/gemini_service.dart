@@ -4,13 +4,10 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 class GeminiService {
   static const String _apiKey = 'AIzaSyA9N2Y8b-jE_Xia0NqSzg56W59FU99mE4U';
 
-  late final GenerativeModel _model;
-
   GeminiService() {
-    _model = GenerativeModel(model: 'gemini-2.5-flash', apiKey: _apiKey);
+    GenerativeModel(model: 'gemini-2.5-flash', apiKey: _apiKey);
   }
 
-  /// Build RAG context from events
   String _buildRagContext(List<Map<String, dynamic>> events) {
     if (events.isEmpty) {
       return "Belum ada event yang tersedia saat ini.";
@@ -41,7 +38,6 @@ class GeminiService {
     return buffer.toString();
   }
 
-  /// Get system instruction with RAG context
   String _getSystemInstruction(String ragContext) {
     return '''
 Peran:
@@ -76,7 +72,6 @@ Aturan Jawaban:
 ''';
   }
 
-  /// Send a message and get response with RAG context
   Future<String> sendMessage(
     String message,
     List<Map<String, dynamic>> events,
@@ -85,7 +80,6 @@ Aturan Jawaban:
       final ragContext = _buildRagContext(events);
       final systemInstruction = _getSystemInstruction(ragContext);
 
-      // Create a new model with system instruction for this context
       final contextModel = GenerativeModel(
         model: 'gemini-2.0-flash-exp',
         apiKey: _apiKey,
@@ -99,7 +93,6 @@ Aturan Jawaban:
     } catch (e) {
       debugPrint('Error sending message to Gemini: $e');
 
-      // Check for API key error
       if (e.toString().contains('API key') ||
           e.toString().contains('401') ||
           e.toString().contains('apiKey')) {
@@ -110,7 +103,6 @@ Aturan Jawaban:
     }
   }
 
-  /// Get initial greeting
   String getInitialGreeting() {
     return 'Halo! Saya asisten Eventara yang siap membantu Anda menemukan informasi seputar event dan festival budaya Indonesia. Ada yang bisa saya bantu?';
   }

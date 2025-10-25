@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/core/apptheme_provider.dart';
-import 'package:eventara/core/shared_preference_provider.dart';
+import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/data/state/user_state.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
 import 'package:eventara/providers/user_provider.dart';
@@ -32,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (xfile != null) {
       final file = File(xfile.path);
       await provider.updateProfilePicture(file);
+      if (!context.mounted) return;
       AppSnackBarWidget.showSuccess(context, "Foto profil berhasil diperbarui");
     }
   }
@@ -39,9 +40,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-      () => Provider.of<UserProvider>(context, listen: false).fetchUser(),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      Provider.of<UserProvider>(context, listen: false).fetchUser();
+    });
   }
 
   @override
@@ -165,7 +167,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onChanged: (value) {
                               themeProvider.toggleTheme(value);
                             },
-                            activeColor: AppColor.primaryLight.color,
                           ),
                           onTap: () {
                             final isDark =
@@ -179,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           title: "Logout",
                           color: Colors.redAccent,
                           onTap: () async {
-                            final shouldLogout = await showDialog<bool>(
+                            await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
                                 title: const Text("Konfirmasi Logout"),
@@ -223,26 +224,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ],
                               ),
                             );
-
-                            if (shouldLogout == true) {
-                              final sharedPrefProvider =
-                                  Provider.of<SharedPreferenceProvider>(
-                                    context,
-                                    listen: false,
-                                  );
-
-                              await sharedPrefProvider.logout();
-
-                              if (context.mounted) {
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const WelcomeScreen(),
-                                  ),
-                                  (route) => false,
-                                );
-                              }
-                            }
                           },
                         ),
                       ],
@@ -266,7 +247,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Widget? trailing,
     VoidCallback? onTap,
   }) {
+    final theme = Theme.of(context);
+
     return Card(
+      color: theme.colorScheme.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 2,
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -280,7 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: color),
@@ -289,14 +273,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: theme.colorScheme.onSurface,
+                  ),
                 ),
               ),
               trailing ??
                   Icon(
                     Icons.arrow_forward_ios_rounded,
                     size: 18,
-                    color: Colors.grey.shade400,
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.4),
                   ),
             ],
           ),
