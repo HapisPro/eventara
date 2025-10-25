@@ -24,6 +24,7 @@ import 'core/index_nav_provider.dart';
 import 'core/styles/app_theme.dart';
 
 // TODO: Check other things & clean up codes
+// TODO: Fix bug bookmark that saving on all accounts instead of one
 // TODO: add event, improve the ux such as fix the used icon, and text area for description
 // TODO: add calendar (use link google calendar)
 // TODO: Chatbot integration
