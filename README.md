@@ -112,7 +112,7 @@ Pastikan kamu telah menginstal:
 |-------|----------------|
 | **UI/UX Designer** | Merancang tampilan yang menarik & intuitif. |
 | **Backend Developer** | Mengelola database, autentikasi, dan sistem verifikasi event. |
-| **Mobile Developer ** | Membangun fitur utama & integrasi antar komponen aplikasi. |
+| **Mobile Developer** | Membangun fitur utama & integrasi antar komponen aplikasi. |
 
 
 ---
