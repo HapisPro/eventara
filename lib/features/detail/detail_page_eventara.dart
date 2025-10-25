@@ -1,4 +1,3 @@
-import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/core/styles/app_color.dart';
 import 'package:eventara/features/auth/widgets/primary_button.dart';
 import 'package:eventara/features/detail/widgets/contact_section.dart';
@@ -10,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../data/models/event_model.dart';
 import 'package:intl/intl.dart';
+import '../../data/services/calendar_utils.dart';
 
 class DetailPageEventara extends StatelessWidget {
   final EventModel eventData;
@@ -263,7 +263,23 @@ class DetailPageEventara extends StatelessWidget {
                     width: double.infinity,
                     child: PrimaryButton(
                       text: 'Tambahkan ke kalender',
-                      onPressed: () => {},
+                      onPressed: () async {
+                        final startTime = eventData.startTime;
+                        final endTime = eventData.startTime.add(
+                          const Duration(hours: 2),
+                        );
+
+                        await CalendarUtils.addToGoogleCalendar(
+                          context:
+                              context, // ⬅ penting agar snackbar bisa tampil
+                          title: eventData.title,
+                          description: eventData.description,
+                          location:
+                              "${eventData.address}, ${eventData.city}, ${eventData.province}",
+                          startTime: startTime,
+                          endTime: endTime,
+                        );
+                      },
                     ),
                   ),
 

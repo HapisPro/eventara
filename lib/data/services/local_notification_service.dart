@@ -5,16 +5,13 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-/// Stream global untuk menangani klik payload notifikasi
 final StreamController<String?> selectNotificationStream =
     StreamController<String?>.broadcast();
 
-/// Instance global plugin notifikasi
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 class LocalNotificationService {
-  /// Inisialisasi plugin
   Future<void> init() async {
     const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
     const iOSInit = DarwinInitializationSettings(
@@ -41,7 +38,6 @@ class LocalNotificationService {
 
   Future<void> configureLocalTimeZone() async {
     tz.initializeTimeZones();
-    // getLocalTimezone sudah mengembalikan String, bukan TimezoneInfo
     final timeZone = await FlutterTimezone.getLocalTimezone();
     tz.setLocalLocation(tz.getLocation(timeZone.identifier));
   }
@@ -50,7 +46,6 @@ class LocalNotificationService {
     await flutterLocalNotificationsPlugin.cancel(id);
   }
 
-  /// Minta izin notifikasi
   Future<bool?> requestPermissions() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       final iOS = flutterLocalNotificationsPlugin
@@ -78,10 +73,9 @@ class LocalNotificationService {
     required String body,
     required DateTime eventDateTime,
   }) async {
-    // Hitung waktu target
+   
     DateTime scheduledDate = eventDateTime.subtract(const Duration(days: 1));
 
-    // Jika waktu sudah lewat, jadwalkan 5 detik dari sekarang
     if (scheduledDate.isBefore(DateTime.now())) {
       scheduledDate = DateTime.now().add(const Duration(seconds: 5));
     }

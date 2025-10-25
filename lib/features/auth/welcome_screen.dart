@@ -21,7 +21,7 @@ class WelcomeScreen extends StatelessWidget {
               "Eventara",
               style: TextStyle(
                 fontSize: 26,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.bold,
                 letterSpacing: 1.5,
                 color: theme.colorScheme.primary,
               ),
