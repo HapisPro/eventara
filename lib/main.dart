@@ -8,6 +8,7 @@ import 'package:eventara/main_screen.dart';
 import 'package:eventara/providers/admin_provider.dart';
 import 'package:eventara/providers/auth_provider.dart';
 import 'package:eventara/providers/bookmark_provider.dart';
+import 'package:eventara/providers/chatbot_provider.dart';
 import 'package:eventara/providers/event_provider.dart';
 import 'package:eventara/providers/home_provider.dart';
 import 'package:eventara/providers/notification_provider.dart';
@@ -24,9 +25,8 @@ import 'core/index_nav_provider.dart';
 import 'core/styles/app_theme.dart';
 
 // TODO: Check other things & clean up codes
+// TODO: Fix bug bookmark that saving on all accounts instead of one
 // TODO: add event, improve the ux such as fix the used icon, and text area for description
-// TODO: add calendar (use link google calendar)
-// TODO: Chatbot integration
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,6 +59,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
         ChangeNotifierProvider(create: (_) => AdminProvider()),
+        ChangeNotifierProvider(create: (_) => ChatbotProvider()),
 
         ChangeNotifierProvider(
           create: (_) => BookmarkProvider(BookmarkService()),

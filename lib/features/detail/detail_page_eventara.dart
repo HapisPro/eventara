@@ -6,9 +6,10 @@ import 'package:eventara/features/detail/widgets/info_card.dart';
 import 'package:eventara/providers/bookmark_provider.dart';
 import 'package:eventara/providers/notification_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../data/models/event_model.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../../data/models/event_model.dart';
 import '../../data/services/calendar_utils.dart';
 
 class DetailPageEventara extends StatelessWidget {
@@ -270,8 +271,7 @@ class DetailPageEventara extends StatelessWidget {
                         );
 
                         await CalendarUtils.addToGoogleCalendar(
-                          context:
-                              context, // ⬅ penting agar snackbar bisa tampil
+                          context: context,
                           title: eventData.title,
                           description: eventData.description,
                           location:
