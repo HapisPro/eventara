@@ -1,5 +1,4 @@
 import 'package:eventara/core/app_snackbar_widget.dart';
-import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/data/state/auth_state.dart';
 import 'package:eventara/features/admin/admin_screen.dart';
 import 'package:eventara/features/auth/sign_up_screen.dart';
@@ -9,6 +8,7 @@ import 'package:eventara/features/auth/widgets/primary_button.dart';
 import 'package:eventara/features/auth/widgets/text_link.dart';
 import 'package:eventara/main_screen.dart';
 import 'package:eventara/providers/auth_provider.dart';
+import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -69,14 +69,16 @@ class _SignInScreenState extends State<SignInScreen> {
               );
 
               if (userRole == 'Admin') {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (_) => const AdminScreen()),
+                  (route) => false,
                 );
               } else {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (_) => const MainScreen()),
+                  (route) => false,
                 );
               }
 

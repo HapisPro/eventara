@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/core/apptheme_provider.dart';
-import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/data/state/user_state.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
+import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -183,9 +183,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             await showDialog<bool>(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: const Text("Konfirmasi Logout"),
-                                content: const Text(
+                                title: Text(
+                                  "Konfirmasi Logout",
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
+                                ),
+                                content: Text(
                                   "Apakah kamu yakin ingin keluar?",
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
                                 ),
                                 actions: [
                                   TextButton(

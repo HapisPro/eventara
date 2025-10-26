@@ -1,9 +1,9 @@
-import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/features/admin/widgets/admin_event_card.dart';
 import 'package:eventara/features/auth/welcome_screen.dart';
 import 'package:eventara/features/detail/detail_page.dart';
 import 'package:eventara/providers/admin_provider.dart';
 import 'package:eventara/providers/auth_provider.dart';
+import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,8 +54,14 @@ class _AdminScreenState extends State<AdminScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Apakah Anda yakin ingin keluar?'),
+        title: Text(
+          'Logout',
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin keluar?',
+          style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         actions: [
           TextButton(
@@ -221,9 +227,17 @@ class _AdminScreenState extends State<AdminScreen> {
                     final confirmed = await showDialog<bool>(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('Setujui Event'),
+                        title: Text(
+                          'Setujui Event',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
                         content: Text(
                           'Apakah Anda yakin ingin menyetujui event "${event.title}"?',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -282,9 +296,17 @@ class _AdminScreenState extends State<AdminScreen> {
                     final confirmed = await showDialog<bool>(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('Tolak Event'),
+                        title: Text(
+                          'Tolak Event',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
                         content: Text(
                           'Apakah Anda yakin ingin menolak event "${event.title}"?',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),

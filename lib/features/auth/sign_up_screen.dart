@@ -76,9 +76,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       AppSnackBarWidget.showError(context, state.message);
                       authProvider.resetState();
                     } else if (state is AuthSuccess) {
-                      Navigator.pushReplacement(
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (_) => const MainScreen()),
+                        (route) => false,
                       );
                       authProvider.resetState();
                     }
