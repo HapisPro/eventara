@@ -173,12 +173,19 @@ class DetailPage extends StatelessWidget {
                       children: [
                         _buildInfoChip(
                           icon: Icons.calendar_today_rounded,
-                          label: _formatDate(eventData.date),
+                          label:
+                              eventData.date.day == eventData.endDate.day &&
+                                  eventData.date.month ==
+                                      eventData.endDate.month &&
+                                  eventData.date.year == eventData.endDate.year
+                              ? _formatDate(eventData.date)
+                              : "${_formatDate(eventData.date)} - ${_formatDate(eventData.endDate)}",
                           color: AppColor.primary.color,
                         ),
                         _buildInfoChip(
                           icon: Icons.access_time_rounded,
-                          label: _formatTime(eventData.startTime),
+                          label:
+                              "${_formatTime(eventData.startTime)} - ${_formatTime(eventData.endTime)}",
                           color: AppColor.accent.color,
                         ),
                       ],
@@ -267,9 +274,7 @@ class DetailPage extends StatelessWidget {
                       text: 'Tambahkan ke kalender',
                       onPressed: () async {
                         final startTime = eventData.startTime;
-                        final endTime = eventData.startTime.add(
-                          const Duration(hours: 2),
-                        );
+                        final endTime = eventData.endTime;
 
                         await CalendarUtils.addToGoogleCalendar(
                           context: context,

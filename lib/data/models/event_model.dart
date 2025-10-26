@@ -8,6 +8,8 @@ class EventModel {
   final String ticketInfo;
   final DateTime date;
   final DateTime startTime;
+  final DateTime endDate;
+  final DateTime endTime;
   final String organizer;
   final String contact;
   final String? imageUrl;
@@ -22,6 +24,8 @@ class EventModel {
     required this.ticketInfo,
     required this.date,
     required this.startTime,
+    required this.endDate,
+    required this.endTime,
     required this.organizer,
     required this.contact,
     this.imageUrl,
@@ -38,6 +42,8 @@ class EventModel {
       'ticketInfo': ticketInfo,
       'date': date.toIso8601String(),
       'startTime': startTime.toIso8601String(),
+      'endDate': endDate.toIso8601String(),
+      'endTime': endTime.toIso8601String(),
       'organizer': organizer,
       'contact': contact,
       'imageUrl': imageUrl,
@@ -58,6 +64,12 @@ class EventModel {
       date: DateTime.parse(map['date']),
       startTime: map['startTime'] != null
           ? DateTime.parse(map['startTime'])
+          : DateTime.now(),
+      endDate: map['endDate'] != null
+          ? DateTime.parse(map['endDate'])
+          : DateTime.parse(map['date']),
+      endTime: map['endTime'] != null
+          ? DateTime.parse(map['endTime'])
           : DateTime.now(),
       organizer: map['organizer'] ?? '',
       contact: map['contact'] ?? '',

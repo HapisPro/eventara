@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eventara/core/app_snackbar_widget.dart';
 import 'package:eventara/data/models/event_model.dart';
+import 'package:eventara/data/state/event_state.dart';
 import 'package:eventara/features/add_event/widgets/date_picker_field.dart';
 import 'package:eventara/features/add_event/widgets/image_upload_box.dart';
 import 'package:eventara/features/add_event/widgets/time_picker_field.dart';
@@ -12,7 +13,6 @@ import 'package:eventara/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:eventara/data/state/event_state.dart';
 
 class AddEventScreen extends StatefulWidget {
   const AddEventScreen({super.key});
@@ -36,6 +36,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
+  DateTime? selectedEndDate;
+  TimeOfDay? selectedEndTime;
   File? _pickedImage;
   final ImagePicker _picker = ImagePicker();
 
@@ -101,7 +103,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   ImageUploadBox(
                     image: _pickedImage,
                     onTap: _pickImageFromGallery,
@@ -174,7 +175,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     selectedDate: selectedDate,
                     onDateSelected: (date) =>
                         setState(() => selectedDate = date),
-                    label: "Pilih tanggal event",
+                    label: "Pilih tanggal mulai",
                   ),
                   const SizedBox(height: 16),
 
@@ -183,6 +184,22 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     onTimeSelected: (time) =>
                         setState(() => selectedTime = time),
                     label: "Pilih jam dimulai",
+                  ),
+                  const SizedBox(height: 16),
+
+                  DatePickerField(
+                    selectedDate: selectedEndDate,
+                    onDateSelected: (date) =>
+                        setState(() => selectedEndDate = date),
+                    label: "Pilih tanggal selesai",
+                  ),
+                  const SizedBox(height: 16),
+
+                  TimePickerField(
+                    selectedTime: selectedEndTime,
+                    onTimeSelected: (time) =>
+                        setState(() => selectedEndTime = time),
+                    label: "Pilih jam selesai",
                   ),
                   const SizedBox(height: 24),
 
@@ -260,12 +277,22 @@ class _AddEventScreenState extends State<AddEventScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     if (selectedDate == null) {
-      AppSnackBarWidget.showWarning(context, "Silahkan pilih tanggal event");
+      AppSnackBarWidget.showWarning(context, "Silahkan pilih tanggal mulai");
       return;
     }
 
     if (selectedTime == null) {
       AppSnackBarWidget.showWarning(context, "Silahkan pilih jam mulai");
+      return;
+    }
+
+    if (selectedEndDate == null) {
+      AppSnackBarWidget.showWarning(context, "Silahkan pilih tanggal selesai");
+      return;
+    }
+
+    if (selectedEndTime == null) {
+      AppSnackBarWidget.showWarning(context, "Silahkan pilih jam selesai");
       return;
     }
 
@@ -276,6 +303,24 @@ class _AddEventScreenState extends State<AddEventScreen> {
       selectedTime!.hour,
       selectedTime!.minute,
     );
+
+    final eventEndDateTime = DateTime(
+      selectedEndDate!.year,
+      selectedEndDate!.month,
+      selectedEndDate!.day,
+      selectedEndTime!.hour,
+      selectedEndTime!.minute,
+    );
+
+    if (eventEndDateTime.isBefore(eventDateTime) ||
+        eventEndDateTime.isAtSameMomentAs(eventDateTime)) {
+      AppSnackBarWidget.showWarning(
+        context,
+        "Waktu selesai harus setelah waktu mulai",
+      );
+      return;
+    }
+
     final docRef = _firestore.collection('events').doc();
     final event = EventModel(
       id: docRef.id,
@@ -287,6 +332,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
       ticketInfo: _ticketController.text,
       date: selectedDate!,
       startTime: eventDateTime,
+      endDate: selectedEndDate!,
+      endTime: eventEndDateTime,
       organizer: _organizerController.text,
       contact: _contactController.text,
       imageUrl: null,
@@ -309,6 +356,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
       _pickedImage = null;
       selectedDate = null;
       selectedTime = null;
+      selectedEndDate = null;
+      selectedEndTime = null;
     });
   }
 }
