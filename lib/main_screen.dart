@@ -1,8 +1,9 @@
 import 'package:eventara/core/styles/app_color.dart';
+import 'package:eventara/features/add_event/add_event_screen.dart';
 import 'package:eventara/features/chatbot/chatbot_screen.dart';
 import 'package:eventara/features/home/screens/bookmark_screen.dart';
 import 'package:eventara/features/profile/profile_screen.dart';
-import 'package:eventara/features/add_event/add_event_screen.dart';
+import 'package:eventara/providers/bookmark_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +25,15 @@ class _MainScreenState extends State<MainScreen> {
     const ChatBotScreen(),
     const ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BookmarkProvider>().loadBookmarks();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

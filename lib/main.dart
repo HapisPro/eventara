@@ -1,4 +1,3 @@
-import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/data/services/bookmark_service.dart';
 import 'package:eventara/data/services/local_notification_service.dart';
 import 'package:eventara/data/services/shared_preferences_service.dart';
@@ -12,6 +11,7 @@ import 'package:eventara/providers/chatbot_provider.dart';
 import 'package:eventara/providers/event_provider.dart';
 import 'package:eventara/providers/home_provider.dart';
 import 'package:eventara/providers/notification_provider.dart';
+import 'package:eventara/providers/shared_preference_provider.dart';
 import 'package:eventara/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +23,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/apptheme_provider.dart';
 import 'core/index_nav_provider.dart';
 import 'core/styles/app_theme.dart';
-
-// TODO: Fix bug bookmark that saving on all accounts instead of one
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
