@@ -1,0 +1,68 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
+class SharedPreferencesService {
+  final SharedPreferences _preferences;
+
+  SharedPreferencesService(this._preferences);
+
+  static const String _keyLogin = "IS_LOGGED_IN";
+  static const String _keyUserId = "USER_ID";
+  static const String _keyUserEmail = "USER_EMAIL";
+  static const String _keyUserName = "USER_NAME";
+  static const String _keyUserRole = "USER_ROLE";
+
+  bool? get isLogin => _preferences.getBool(_keyLogin);
+
+  String? get userId => _preferences.getString(_keyUserId);
+
+  String? get userEmail => _preferences.getString(_keyUserEmail);
+
+  String? get userName => _preferences.getString(_keyUserName);
+
+  String? get userRole => _preferences.getString(_keyUserRole);
+
+  Future<void> login({
+    String? userId,
+    String? email,
+    String? userName,
+    String? role,
+  }) async {
+    try {
+      await _preferences.setBool(_keyLogin, true);
+      if (userId != null) {
+        await _preferences.setString(_keyUserId, userId);
+      }
+      if (email != null) {
+        await _preferences.setString(_keyUserEmail, email);
+      }
+      if (userName != null) {
+        await _preferences.setString(_keyUserName, userName);
+      }
+      if (role != null) {
+        await _preferences.setString(_keyUserRole, role);
+      }
+    } catch (e) {
+      throw Exception("Failed to save login state: $e");
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      await _preferences.setBool(_keyLogin, false);
+      await _preferences.remove(_keyUserId);
+      await _preferences.remove(_keyUserEmail);
+      await _preferences.remove(_keyUserName);
+      await _preferences.remove(_keyUserRole);
+    } catch (e) {
+      throw Exception("Failed to clear login state: $e");
+    }
+  }
+
+  Future<void> clearAll() async {
+    try {
+      await _preferences.clear();
+    } catch (e) {
+      throw Exception("Failed to clear preferences: $e");
+    }
+  }
+}
