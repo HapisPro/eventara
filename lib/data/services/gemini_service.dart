@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class GeminiService {
-  static const String _apiKey = 'AIzaSyA9N2Y8b-jE_Xia0NqSzg56W59FU99mE4U';
+  static const String _apiKey = 'API KEY DISINI';
 
   GeminiService() {
     GenerativeModel(model: 'gemini-2.5-flash', apiKey: _apiKey);
